@@ -4,3 +4,4 @@ actions:
 - utter_greet
 - utter_weather
 - utter_goodbye
+- utter_time

@@ -1,0 +1,11 @@
+version: "3.1"
+nlu:
+- intent: time
+  examples: |
+    - what [time]{"entity": "time", "value": "time"} is it ?
+    - what is the [time]{"entity": "time", "value": "time"} ?
+    - what [time]{"entity": "time", "value": "time"} have you got ?
+
+- synonym: time
+  examples: |
+    - o'clock

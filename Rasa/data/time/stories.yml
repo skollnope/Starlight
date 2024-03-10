@@ -1,0 +1,7 @@
+version: "3.1"
+
+stories:
+- story: time reauest
+  steps:
+    - intent: time
+    - action: utter_time
