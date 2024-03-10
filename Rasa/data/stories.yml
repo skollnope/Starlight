@@ -5,8 +5,3 @@ stories:
   steps: 
     - intent: greet
     - action: utter_greet
-
-- story: weather request
-  steps:
-    - intent: weather
-    - action: utter_weather
