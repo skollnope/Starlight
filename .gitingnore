@@ -1,5 +1,0 @@
-#ignore all rasa specific files
-Rasa/.rasa/
-
-#ignore all trained model
-Rasa/models/
