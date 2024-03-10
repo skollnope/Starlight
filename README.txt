@@ -16,3 +16,6 @@ Follow the following link for installation steps.
 	- https://www.youtube.com/watch?v=RVoFqxmG8p0&ab_channel=Rasa
 	or -  https://rasa.com/docs/rasa/installation/environment-set-up
 
+Rasa Documentation:
+	- https://rasa.com/docs/rasa/
+
