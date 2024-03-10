@@ -1,23 +1,5 @@
 version: '3.1'
-entities:
-- weather
-- day
-
-intents:
-- affirm
-- bot_challenge
-- deny
-- goodbye
-- greet
-- mood_great
-- mood_unhappy
-- weather
 
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
-
-actions:
-- utter_greet
-- utter_weather
-- utter_goodbye
