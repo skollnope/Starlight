@@ -2,4 +2,4 @@
 Rasa/.rasa/
 
 #ignore all trained model
-Rasa/models/*
+Rasa/models/
