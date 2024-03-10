@@ -1,0 +1,12 @@
+version: "3.1"
+
+stories:
+- story: greet
+  steps: 
+    - intent: greet
+    - action: utter_greet
+
+- story: weather request
+  steps:
+    - intent: weather
+    - action: utter_weather

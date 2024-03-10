@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-meteo",
+      "2": "I-meteo",
+      "3": "L-meteo",
+      "4": "U-meteo",
+      "5": "B-weather",
+      "6": "I-weather",
+      "7": "L-weather",
+      "8": "U-weather",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-meteo": 1,
+      "I-meteo": 2,
+      "L-meteo": 3,
+      "U-meteo": 4,
+      "B-weather": 5,
+      "I-weather": 6,
+      "L-weather": 7,
+      "U-weather": 8,
+      "O": 0
+    },
+    "num_tags": 9
+  }
+]
