@@ -4,5 +4,3 @@ responses:
   - text: Hey! How are you?
   utter_goodbye:
   - text: Bye
-  utter_weather:
-  - text: it's cloudy
