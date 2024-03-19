@@ -5,3 +5,4 @@ actions:
 - utter_weather
 - utter_goodbye
 - utter_time
+- action_get_localtime
