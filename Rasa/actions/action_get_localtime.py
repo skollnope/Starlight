@@ -13,17 +13,14 @@ class ActionGetLocaltime(Action):
            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
         current_time = datetime.datetime.now()
-        message = current_time.strftime("%H:%M:%S")
+        message = "It's " + current_time.strftime("%H:%M:%S")
 
         # Check if location entity is present in tracker
-        country = tracker.get_latest_entity_values("location")
-        if country:
-            # Entity found, use the first value
-            country = next(country)
+        country = next(tracker.get_latest_entity_values("country"), None)
+        if country is not None:
             message += f" in {country}"  # Use f-string for clean formatting
         else:
-            # Entity not found, handle the case
-            message += " (your location)"  # Or any default message
+            message += " on your computer"  # Or any default message
 
         dispatcher.utter_message(text=message)        
         return []

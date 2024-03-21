@@ -6,17 +6,9 @@ nlu:
     - what is the time ?
     - what time have you got ?
     - what time is it in [France](country)
-    - what time have you got in [France](country)
+    - what time is it in [Germany](country)
 
 - synonym: time
   examples: |
     - o'clock
-
-- lookup: country
-  examples: |
-    - France
-    - England
-    - USA
-    - Germany
-    - Spanish
 
