@@ -8,21 +8,20 @@ from . import sharedDefinitions as sharedDef
 
 class ActionGetCountryLocaltime(Action):
     def name(delft) -> Text:
-        return "action_get_country_localtime"
+        return "action_get_city_localtime"
     
     async def run(self,
            dispatcher: CollectingDispatcher,
            tracker: Tracker,
            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        current_time = datetime.datetime.now()
         message: str
         localtime = sharedDef.getLocalTime()
 
         # Check if location entity is present in tracker
-        country = next(tracker.get_latest_entity_values(cstDef.ENTITY_COUNTRY), None)
-        if country is not None:
-            message = f"I can't give you the current time in {country} (country) but it's {localtime} on you computer"
+        city = next(tracker.get_latest_entity_values(cstDef.ENTITY_CITY), None)
+        if city is not None:
+            message = f"I can't give you the current time in {city} (city) but it's {localtime} on you computer"
         else:
             message = f"it's {localtime}"
 

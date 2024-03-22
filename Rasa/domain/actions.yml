@@ -7,3 +7,4 @@ actions:
 - utter_time
 - action_get_localtime
 - action_get_country_localtime
+- action_get_city_localtime

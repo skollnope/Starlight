@@ -1,0 +1,15 @@
+version: "3.1"
+nlu:
+- lookup: city
+  examples: |
+    - Paris
+    - London
+    - New-York
+    - Madrid
+    - Rome
+    - Berlin
+    - Washington
+    - Los Angeles
+    - Pekin
+    - Tokyo
+    - Seoul

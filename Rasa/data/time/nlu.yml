@@ -15,6 +15,14 @@ nlu:
     - what is the local time of [Monaco](country) ?
     - give me the local time in [switzerland](country)
 
+- intent: city_time
+  examples: |
+    - what time is it in [Paris](city) ?
+    - what time is it in [Madrid](city) ?
+    - what is the local time of [New-York](city) ?
+    - give me the local time in [Tokyo](city)
+    - give me the local time in [Pekin](city)
+
 - synonym: time
   examples: |
     - o'clock

@@ -6,3 +6,4 @@ intents:
 - weather
 - time
 - country_time
+- city_time

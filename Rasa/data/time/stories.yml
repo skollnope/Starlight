@@ -10,3 +10,8 @@ stories:
   steps:
     - intent: country_time
     - action: action_get_country_localtime
+    
+- story: city time request
+  steps:
+    - intent: city_time
+    - action: action_get_city_localtime
