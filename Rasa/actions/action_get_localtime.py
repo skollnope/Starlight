@@ -2,7 +2,8 @@ from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 import datetime
-from pytz import timezone
+
+import constantsDef  as cstDef
 
 class ActionGetLocaltime(Action):
     def name(delft) -> Text:
@@ -18,7 +19,7 @@ class ActionGetLocaltime(Action):
         localtime = current_time.strftime("%H:%M:%S")
 
         # Check if location entity is present in tracker
-        country = next(tracker.get_latest_entity_values("country"), None)
+        country = next(tracker.get_latest_entity_values(cstDef.ENTITY_COUNTRY), None)
         if country is not None:
             message = f"I can't give you the current time in {country} but it's {localtime} on you computer"
         else:
