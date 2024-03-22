@@ -3,7 +3,7 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 import datetime
 
-import constantsDef  as cstDef
+from  . import constantsDef  as cstDef
 
 class ActionGetLocaltime(Action):
     def name(delft) -> Text:
