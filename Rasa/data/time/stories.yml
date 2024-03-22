@@ -1,7 +1,12 @@
 version: "3.1"
 
 stories:
-- story: time reauest
+- story: time request
   steps:
     - intent: time
     - action: action_get_localtime
+    
+- story: country time request
+  steps:
+    - intent: country_time
+    - action: action_get_country_localtime

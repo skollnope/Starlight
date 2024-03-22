@@ -4,6 +4,8 @@ from rasa_sdk.executor import CollectingDispatcher
 import datetime
 
 from  .. import constantsDef  as cstDef
+from . import sharedDefinitions as sharedDef
+
 
 class ActionGetLocaltime(Action):
     def name(delft) -> Text:
@@ -14,16 +16,7 @@ class ActionGetLocaltime(Action):
            tracker: Tracker,
            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
-        current_time = datetime.datetime.now()
-        message: str
-        localtime = current_time.strftime("%H:%M:%S")
-
-        # Check if location entity is present in tracker
-        country = next(tracker.get_latest_entity_values(cstDef.ENTITY_COUNTRY), None)
-        if country is not None:
-            message = f"I can't give you the current time in {country} but it's {localtime} on you computer"
-        else:
-            message = f"it's {localtime}"
+        message = f"it's {sharedDef.getLocalTime()}"
 
         dispatcher.utter_message(text=message)        
         return []

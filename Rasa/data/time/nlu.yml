@@ -5,8 +5,15 @@ nlu:
     - what time is it ?
     - what is the time ?
     - what time have you got ?
-    - what time is it in [France](country)
-    - what time is it in [Germany](country)
+
+- intent: country_time
+  examples: |
+    - what time is it in [France](country) ?
+    - what time is it in [Germany](country) ?
+    - what is the [Spanish](country)'s local time ?
+    - what is the [Finland](country)'s local time ?
+    - what is the local time of [Monaco](country) ?
+    - give me the local time in [switzerland](country)
 
 - synonym: time
   examples: |

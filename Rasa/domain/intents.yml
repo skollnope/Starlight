@@ -5,3 +5,4 @@ intents:
 - greet
 - weather
 - time
+- country_time
