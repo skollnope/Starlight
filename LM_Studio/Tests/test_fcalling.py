@@ -1,6 +1,8 @@
 from openai import OpenAI
+from openai.types.chat import ChatCompletionMessage
+
 from Starlight.LM_Studio import constants as cst
-from LM_Studio.Functions import function_calling as funcs
+from Starlight.LM_Studio.Functions import function_calling as funcs
 
 # Point to the local server
 client = OpenAI(base_url=cst.MODEL_URL, api_key=cst.API_KEY)
@@ -16,10 +18,11 @@ completion = client.chat.completions.create(
     temperature=0.7,
     tools=funcs.getFunctions())
 
-if(completion.choices[0].finish_reason == "function_calling"):
-    name = completion.choices[0].message.function_call.name
-    args = completion.choices[0].message.function_call.arguments
-
-    functions = locals()
+if(completion.choices[0].finish_reason == "tool_calls"):
+    calls = completion.choices[0].message.tool_calls
+    for call in calls:
+        name = call.function.name
+        args = call.function.arguments
+        funcs.invoke(name, args)
 
 print(completion.choices[0].message.function_call)

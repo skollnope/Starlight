@@ -7,7 +7,7 @@ from LM_Studio.Functions import function_calling as funcs
 client = OpenAI(base_url=cst.MODEL_URL, api_key=cst.API_KEY)
 
 history = [
-    #{"role": "system", "content": cst.SYSTEM_PROMPT},
+    {"role": "system", "content": cst.SYSTEM_PROMPT},
     {"role": "user", "content": input("> ")},
 ]
 
@@ -16,8 +16,7 @@ while True:
         messages=history,
         model=cst.DEFAULT_MODEL,
         temperature=0.7,
-        stream=True,
-        functions=funcs.getFunctions()
+        stream=True
     )
 
     new_message = {"role": "assistant", "content": ""}
