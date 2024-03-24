@@ -1,3 +1,3 @@
-from Starlight.LM_Studio import function_calling as funcs
+from LM_Studio.Functions import function_calling as funcs
 
-funcs.invoke("hello_world")
+funcs.invoke("hello_you", {"name": "Antonin"})
