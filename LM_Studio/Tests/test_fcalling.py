@@ -8,15 +8,16 @@ from Starlight.LM_Studio.Functions import function_calling as funcs
 client = OpenAI(base_url=cst.MODEL_URL, api_key=cst.API_KEY)
 
 message = [
-    {"role": "system", "content": "Only answer to the question"},
-    {"role": "user", "content": input("> ")},
+    {"role": "system", "content": "you have access to the following functions, use them."},
+    {"role": "user", "content": "go to the next music"},
 ]
 
 completion = client.chat.completions.create(
     messages=message,
     model=cst.DEFAULT_MODEL,
     temperature=0.7,
-    tools=funcs.getFunctions())
+    tools=funcs.getFunctions(),
+    tool_choice="hello_world")
 
 if(completion.choices[0].finish_reason == "tool_calls"):
     calls = completion.choices[0].message.tool_calls
@@ -25,4 +26,4 @@ if(completion.choices[0].finish_reason == "tool_calls"):
         args = call.function.arguments
         funcs.invoke(name, args)
 
-print(completion.choices[0].message.function_call)
+print(completion.choices[0].message.content)
