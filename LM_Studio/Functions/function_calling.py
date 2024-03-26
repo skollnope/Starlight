@@ -7,11 +7,15 @@ def invoke(name:str, args:Any=None):
             return function(args)
     else:
         print("No function named: \"" + name + "\" found")
+        
+def serialize_function(func_def: dict[str, Any]) -> dict[str, Any]:
+     return {"type": "function",
+             "function": func_def}
 
 def getFunctions() -> list[dict[str, Any]]:
     return [
-            hw.hello_world_def,
-            hw.hello_you_def,
+            serialize_function(hw.hello_world_def),
+            serialize_function(hw.hello_you_def),
         ]
 
 FUNCTIONS: dict[str, Any] = {
