@@ -15,10 +15,10 @@ def serialize_function(func_def: dict[str, Any]) -> dict[str, Any]:
 def getFunctions() -> list[dict[str, Any]]:
     return [
             serialize_function(hw.hello_world_def),
-            serialize_function(hw.hello_you_def),
+            serialize_function(hw.string_answer_def),
         ]
 
 FUNCTIONS: dict[str, Any] = {
     hw.hello_world_def["name"]: hw.hello_world,
-    hw.hello_you_def["name"]: hw.hello_you,
+    hw.string_answer_def["name"]: hw.string_answer,
     }

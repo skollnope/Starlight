@@ -1,5 +1,6 @@
 from openai import OpenAI
-from openai.types.chat import ChatCompletionMessage
+import json
+import re
 
 from Starlight.LM_Studio import constants as cst
 from Starlight.LM_Studio.Functions import function_calling as funcs
@@ -7,23 +8,22 @@ from Starlight.LM_Studio.Functions import function_calling as funcs
 # Point to the local server
 client = OpenAI(base_url=cst.MODEL_URL, api_key=cst.API_KEY)
 
-message = [
-    {"role": "system", "content": "you have access to the following functions, use them."},
-    {"role": "user", "content": "go to the next music"},
+messages = [
+    {"role": "system", "content": f"You are a helpful assistant with access to the following functions. Use them if required- {json.dumps(funcs.getFunctions())}"},
+    {"role": "user", "content": "what's your name ?"},
 ]
 
 completion = client.chat.completions.create(
-    messages=message,
+    messages=messages,
     model=cst.DEFAULT_MODEL,
-    temperature=0.7,
-    tools=funcs.getFunctions(),
-    tool_choice="hello_world")
+    temperature=0.3)
 
-if(completion.choices[0].finish_reason == "tool_calls"):
-    calls = completion.choices[0].message.tool_calls
-    for call in calls:
-        name = call.function.name
-        args = call.function.arguments
-        funcs.invoke(name, args)
+message = completion.choices[0].message.content
+print(message)
 
-print(completion.choices[0].message.content)
+messages.append({"role": "assistant", "content": message})
+match = re.search(r"<functioncall>(.*?)<", message, re.DOTALL)
+if not match:
+    print("No function needed")
+else:
+    print("function needed")
