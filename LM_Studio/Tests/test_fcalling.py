@@ -10,7 +10,7 @@ client = OpenAI(api_key=api.getKey())
 
 message = [
     {"role": "system", "content": "Only answer to the question"},
-    {"role": "user", "content": input("> ")},
+    {"role": "user", "content": input()},
 ]
 
 completion = client.chat.completions.create(
