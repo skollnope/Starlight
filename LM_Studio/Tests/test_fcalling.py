@@ -15,7 +15,7 @@ message = [
 
 completion = client.chat.completions.create(
     messages=message,
-    model=cst.DEFAULT_MODEL,
+    model=cst.MODEL_DEFAULT,
     temperature=0.7,
     tools=funcs.getFunctions())
 
