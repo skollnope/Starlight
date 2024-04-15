@@ -2,10 +2,11 @@ from openai import OpenAI
 from openai.types.chat import ChatCompletionMessage
 
 from Starlight.LM_Studio import constants as cst
+from Starlight.LM_Studio import APIAccess as api
 from Starlight.LM_Studio.Functions import function_calling as funcs
 
 # Point to the local server
-client = OpenAI(base_url=cst.MODEL_URL, api_key=cst.API_KEY)
+client = OpenAI(api_key=api.getKey())
 
 message = [
     {"role": "system", "content": "Only answer to the question"},
