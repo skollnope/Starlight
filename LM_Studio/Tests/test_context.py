@@ -4,14 +4,13 @@ from Starlight.LM_Studio import constants as cst
 from Starlight.LM_Studio import APIAccess as api
 
 # Point to the local server
-print(api.getKey())
-client = OpenAI(api_key=api.getKey())
+client = OpenAI(api_key=api.get_openai_key())
 
 contexts=["Unknown", "Weather", "Greet"]
-prompt="You are an assistant which is requested to find the context of the sentence. Find the closest context with the following keywords "
-prompt+=contexts[0] + ", "
-prompt+=contexts[1] + ", "
-prompt+=contexts[2]
+prompt="You are an assistant which is requested to find the context of the sentence. Find the closest context with the following keywords: "
+prompt += contexts[0] + ", "
+prompt += contexts[1] + ", "
+prompt += contexts[2]
 
 message = [
     {"role": "system", "content": prompt},
