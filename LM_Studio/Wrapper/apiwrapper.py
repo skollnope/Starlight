@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from Starlight.LM_Studio import constants as cst
+from Starlight.LM_Studio.Functions import function_calling as func
 
 class APIWrapper(ABC):
     def __init__(self):
@@ -25,7 +26,7 @@ class APIWrapper(ABC):
             the keyword context
         """
         pass
-    
-    @abstractmethod
-    def method2(self, params):
+
+    def get_methods_by_context(context: str):
+        func.getFunctions()
         pass

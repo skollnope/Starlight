@@ -11,7 +11,7 @@ class OpenAIWrapper(APIWrapper):
     def __init__(self, model:str=cst.MODEL_GPT35):
         super().__init__()
         self.model = model
-        self.client = OpenAI(api.get_openai_key())
+        self.client = OpenAI(api_key=api.get_openai_key())
 
     def create_message(self, prompt:str, user_sentence:str):
         return [
@@ -28,6 +28,6 @@ class OpenAIWrapper(APIWrapper):
             messages=message,
             model=cst.MODEL_DEFAULT,
             temperature=0)
-        return completion.choices[0].message
+        return completion.choices[0].message.content
 
 
