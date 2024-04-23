@@ -20,24 +20,28 @@ FUNCTIONS: dict[str, Any] = {
     hw.hello_you_def["name"]: hw.hello_you,
     }
 
-
 class FunctionCaller():    
     context:str
     functions:list[dict[str, Any]]
 
-    def __init__(self, context:str):
-         self.context = context
-         pass
-    def __init__(self, context:str, functions:dict[str, Any]):
+    def __init__(self, context:str, functions:dict[str, Any]=None):
          self.context = context
          self.functions = functions
-         pass
     
     def append_function(self, func:dict[str, Any]):
-         self.functions.append(func)
-         pass
+         if self.functions is not None:
+            self.functions.append(func)
     
     def remove_function(self, name:str):
+         func = self.get_function(name)
+         if func is not None:
+              self.functions.remove(func)
+
+    def get_function(self, name:str) -> dict[str, Any]:
+         if self.functions is None:
+              return None
+         
          for func in self.functions:
               if func["name"] == name:
-                   self.functions.remove(func)
+                   return func
+         return None
