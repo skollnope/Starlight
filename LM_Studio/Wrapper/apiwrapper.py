@@ -3,6 +3,7 @@ from Starlight.LM_Studio import constants as cst
 from Starlight.LM_Studio.Functions import function_calling as func
 
 class APIWrapper(ABC):
+
     def __init__(self):
         # Any common initialization code can go here
         pass
