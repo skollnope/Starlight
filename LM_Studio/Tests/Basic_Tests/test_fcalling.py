@@ -6,11 +6,11 @@ from Starlight.LM_Studio import APIAccess as api
 from Starlight.LM_Studio.Functions import function_calling as funcs
 
 # Point to the local server
-client = OpenAI(api_key=api.getKey())
+client = OpenAI(api_key=api.get_openai_key())
 
 message = [
     {"role": "system", "content": "Only answer to the question"},
-    {"role": "user", "content": input()},
+    {"role": "user", "content": "hello world ?"},
 ]
 
 completion = client.chat.completions.create(

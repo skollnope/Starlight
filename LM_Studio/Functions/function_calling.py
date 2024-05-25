@@ -80,7 +80,9 @@ class FunctionCaller():
          return None
     
      def serialize(self) -> list[dict[str, Any]]:
-         lst = []
-         for item in self.functions:
-              lst.append(item.desc)
-         return lst
+        functions = []
+        for item in self.functions:
+              functions.append({"type": "function",
+                                 "function": item.desc})
+        
+        return functions
