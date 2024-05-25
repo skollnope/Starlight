@@ -38,7 +38,7 @@ class FunctionItem():
           return self._description
 
      def invoke(self, args:dict[str, str]) -> str:
-         print("invoking method: " + self.name)
+         #print("invoking method: " + self.name)
          return self._func(args)
 
 class FunctionCaller():    

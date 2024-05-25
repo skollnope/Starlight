@@ -6,6 +6,7 @@ from Starlight.LM_Studio.Functions.function_calling import FunctionCaller
 import json
 from typing import Any
 from openai import OpenAI
+from openai.types.chat.chat_completion import Choice
 
 class OpenAIWrapper(APIWrapper):
     _model:str = ""
@@ -28,6 +29,7 @@ class OpenAIWrapper(APIWrapper):
             {"role": "user", "content": message}
         ]
     
+    @staticmethod
     def parse_args(str_args:str) -> dict[str, str]:
         json_obj = json.loads(str_args)
         return json_obj
@@ -47,23 +49,32 @@ class OpenAIWrapper(APIWrapper):
             
         return completion.choices[0].message.content
     
-    def parse_reply(self, choice:Any, function_caller:FunctionCaller=None):
+    def parse_reply(self, choice:Choice, function_caller:FunctionCaller=None) -> str:
         finish_reason = choice.finish_reason
         self.log("finish reason: " + finish_reason)
 
         if finish_reason == "tool_calls" and function_caller is not None:
+            #first, store the answer inside the history
+            self._history.append(self.create_assistant_toolcalls(choice.message.tool_calls))
+
+            #call each function requested, then add the answers to the history
             for call in choice.message.tool_calls:
+                self.log("trying to invoke '" + call.function.name + "' method with \n" + call.function.arguments + " args")
                 result = function_caller.get_function(call.function.name).invoke(self.parse_args(call.function.arguments))
-                self._history.append(self.create_toolcalling_message(result))
+                self._history.append(self.create_toolcalling_message(result, call.id))
                 
+            #automatically send all function answers
             completion = self._client.chat.completions.create(
                 messages=self._history,
                 model=self._model,
                 temperature=0.7)
 
-            self.parse_reply(completion.choices[0])
+            #return the final AI answer
+            return self.parse_reply(completion.choices[0])
 
         elif finish_reason == "stop":
+            #only text answer, just add it to the history then return the answer
+            self._history.append(self.create_assistant_message(choice.message.content))
             return choice.message.content
 
         pass
@@ -90,11 +101,7 @@ class OpenAIWrapper(APIWrapper):
             temperature=0.7,
             tools=function_description)
         
-        reply = self.parse_reply(completion.choices[0])
-        
-        answ = self.create_assistant_message(reply)
-        self._history.append(answ)
-        return reply
+        return self.parse_reply(completion.choices[0], fCaller)
 
 
 
