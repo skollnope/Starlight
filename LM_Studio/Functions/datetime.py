@@ -3,7 +3,7 @@ from typing import Any
 from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, FunctionItem
 
 get_local_time_def: dict[str, Any] = {"name": "get_local_time",
-                                  "description": "return the current date time"}
+                                      "description": "return the date and the time"}
 def get_local_time(args:dict[str, str]=None) -> str:
     return datetime.now().isoformat()
 

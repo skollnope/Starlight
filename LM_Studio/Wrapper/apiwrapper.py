@@ -3,19 +3,37 @@ from abc import ABC, abstractmethod
 from Starlight.LM_Studio import constants as cst
 from Starlight.LM_Studio.Functions import function_calling as func
 from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, FunctionItem
+from Starlight.LM_Studio.context import Context
 
 class APIWrapper(ABC):
     _function_list: list[FunctionCaller]
+    _history:list[dict[str, str]] = []
+    debug:bool = False
+    _contexts:Context = Context()
 
     def __init__(self):
         # Any common initialization code can go here
         pass
 
-    CONTEXTS = [cst.CONTEXT_UNKNOWN, "Weather", "News", "DateTime"]
+    def __del__(self):
+        if self.debug:
+            self.print_history()
+    
+    def print_history(self):
+        for h in self._history:
+            print(h["role"] + ": " + h["content"])
+    
+    def create_user_message(self, message:str):
+        return {"role": "user", "content": message}
+    
+    def create_assistant_message(self, message:str):
+        return {"role": "assistant", "content": message}
+    
+    def create_toolcalling_message(self, message:str):
+        return {"role": "tool_calling", "content": message}
+
     def serialize_contexts(self, prompt:str):
-        for context in self.CONTEXTS:
-            prompt += context + ", "
-        return prompt[:-2] #remove the last ', ' chars of the last context addition
+        return prompt + self._contexts.serialize()
     
     @abstractmethod
     def ask_for_context(self, sentence:str) -> str:
@@ -40,3 +58,7 @@ class APIWrapper(ABC):
     @abstractmethod
     def parse_reply(answer:Any):
         pass
+
+    def log(self, log_message:str):
+        if self.debug:
+            print(log_message)

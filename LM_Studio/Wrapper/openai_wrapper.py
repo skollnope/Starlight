@@ -8,20 +8,17 @@ from typing import Any
 from openai import OpenAI
 
 class OpenAIWrapper(APIWrapper):
-    MODEL:str = ""
-    CLIENT:OpenAI = None
-    _available_functions:list[FunctionCaller] = None
-    _history:list[dict[str, str]] = []
-    debug:bool = False
+    _model:str = ""
+    _client:OpenAI = None
 
     def __init__(self, 
                  model:str=cst.MODEL_GPT35, 
                  functions:list[FunctionCaller]=None,
                  prompt:str=cst.SYSTEM_PROMPT):
         super().__init__()
-        self.MODEL = model
-        self._available_functions = functions
-        self.CLIENT = OpenAI(api_key=api.get_openai_key())
+        self._model = model
+        self._function_list = functions
+        self._client = OpenAI(api_key=api.get_openai_key())
 
         self._history.append({"role": "system", "content": prompt})
 
@@ -31,31 +28,20 @@ class OpenAIWrapper(APIWrapper):
             {"role": "user", "content": message}
         ]
     
-    def create_user_message(self, message:str):
-        return {"role": "user", "content": message}
-    
-    def create_assistant_message(self, message:str):
-        return {"role": "assistant", "content": message}
-    
-    def create_toolcalling_message(self, message:str):
-        return {"role": "tool_calling", "content": message}
-    
     def parse_args(str_args:str) -> dict[str, str]:
         json_obj = json.loads(str_args)
         return json_obj
     
     def ask_for_context(self, sentence:str) -> str:
-        # Implementation of method1 specific to this API
         prompt = self.serialize_contexts(cst.CONTEXT_PROMPT)
         message = self.create_message_with_prompt(prompt, sentence)
 
-        completion = self.CLIENT.chat.completions.create(
+        completion = self._client.chat.completions.create(
             messages=message,
             model=cst.MODEL_DEFAULT,
             temperature=0)
         
-        if self.debug:
-            print("The kept context for this sentence \"" + 
+        self.log("The kept context for this sentence \"" + 
                   sentence + "\" is: " + 
                   completion.choices[0].message.content)
             
@@ -63,17 +49,16 @@ class OpenAIWrapper(APIWrapper):
     
     def parse_reply(self, choice:Any, function_caller:FunctionCaller=None):
         finish_reason = choice.finish_reason
-        if self.debug:
-            print("finish reason: " + finish_reason)
+        self.log("finish reason: " + finish_reason)
 
         if finish_reason == "tool_calls" and function_caller is not None:
             for call in choice.message.tool_calls:
                 result = function_caller.get_function(call.function.name).invoke(self.parse_args(call.function.arguments))
                 self._history.append(self.create_toolcalling_message(result))
                 
-            completion = self.CLIENT.chat.completions.create(
+            completion = self._client.chat.completions.create(
                 messages=self._history,
-                model=self.MODEL,
+                model=self._model,
                 temperature=0.7)
 
             self.parse_reply(completion.choices[0])
@@ -85,21 +70,23 @@ class OpenAIWrapper(APIWrapper):
     
     def ask_something(self, question:str) -> str:
         context = cst.CONTEXT_UNKNOWN
-        if self._available_functions is not None:
+        if self._function_list is not None:
             context = self.ask_for_context(question)
 
         function_description:list[dict[str, Any]] = None
         if context != cst.CONTEXT_UNKNOWN:
-            for caller in self._available_functions:
-                if caller._context == context:
-                    print(str(caller.count))
-                    function_description = caller.serialize()
+            fCaller = self.get_methods_by_context(context)
+            if fCaller is not None:
+                function_description = fCaller.serialize()
+                self.log("Function calling found for the '" + context + "' context")
+
+        self.log(function_description)
 
         self._history.append(self.create_user_message(question))
 
-        completion = self.CLIENT.chat.completions.create(
+        completion = self._client.chat.completions.create(
             messages=self._history,
-            model=self.MODEL,
+            model=self._model,
             temperature=0.7,
             tools=function_description)
         
