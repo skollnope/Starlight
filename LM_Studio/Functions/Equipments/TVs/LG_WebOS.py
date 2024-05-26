@@ -9,7 +9,7 @@ store = {}
 #    client = WebOSClient("<IP Address of TV>")
 # or for newer models:
 #    client = WebOSClient("<IP Address of TV>", secure=True)
-client = WebOSClient.discover()[0] # Use discover(secure=True) for newer models.
+client = WebOSClient("192.168.1.42") # Use discover(secure=True) for newer models.
 client.connect()
 for status in client.register(store):
     if status == WebOSClient.PROMPTED:
