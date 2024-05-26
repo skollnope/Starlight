@@ -17,26 +17,10 @@ get_country_local_time_def: dict[str, Any] = {"name": "get_country_local_time",
                                                           "description": "the country",
                                                       },
                                                   },
-                                                  "required": ["country"],
-                                              }}
+                                                  "required": ["country"]}}
 def get_country_local_time(args:dict[str, str]=None) -> str:
     return "I don't know what time is it in " + args["country"]
 
 datetime_functions = FunctionCaller("DateTime")
 datetime_functions.append_function(FunctionItem(get_local_time_def, get_local_time))
 datetime_functions.append_function(FunctionItem(get_country_local_time_def, get_country_local_time))
-
-
-    #  {"name": "get_current_weather",
-    #   "description": "Get the current weather in a given location",
-    #   "parameters": {
-    #     "type": "object",
-    #     "properties": {
-    #       "location": {
-    #         "type": "string",
-    #         "description": "The city and state, e.g. San Francisco, CA",
-    #       },
-    #       "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
-    #     },
-    #     "required": ["location"],
-    #   }}
