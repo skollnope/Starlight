@@ -6,14 +6,18 @@ from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, Funct
 from Starlight.LM_Studio.context import Context
 
 class APIWrapper(ABC):
-    _function_list: list[FunctionCaller]
+    _function_list: list[FunctionCaller] = None
     _history:list[dict[str, str]] = []
     debug:bool = False
     _contexts:Context = Context()
 
-    def __init__(self):
-        # Any common initialization code can go here
-        pass
+    def __init__(self, functions:list[FunctionCaller]):
+        if functions is None:
+            pass
+
+        for f in functions:
+            self._contexts.append(f.context)
+        self._function_list = functions
 
     def __del__(self):
         if self.debug:
@@ -38,9 +42,20 @@ class APIWrapper(ABC):
     @staticmethod
     def create_toolcalling_message(message:str, id:str):
         return {"role": "tool", "content": message, "tool_call_id": id}
+        
+    @staticmethod
+    def create_message_with_prompt(prompt:str, message:str):
+        return [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": message}
+        ]
 
     def serialize_contexts(self, prompt:str):
         return prompt + self._contexts.serialize()
+    
+    def append_function_caller(self, function:FunctionCaller):
+        if self._contexts.append(function.context):
+            self._function_list.append(function)
     
     @abstractmethod
     def ask_for_context(self, sentence:str) -> str:
@@ -56,7 +71,7 @@ class APIWrapper(ABC):
         """
         pass
 
-    def get_methods_by_context(self, context: str) -> FunctionCaller:
+    def get_functions_by_context(self, context: str) -> FunctionCaller:
         for func in self._function_list:
             if(func.context == context):
                 return func

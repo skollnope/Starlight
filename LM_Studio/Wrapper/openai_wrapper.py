@@ -6,7 +6,7 @@ from Starlight.LM_Studio.Functions.function_calling import FunctionCaller
 import json
 from typing import Any
 from openai import OpenAI
-from openai.types.chat.chat_completion import Choice
+from openai.types.chat.chat_completion import Choice, ChatCompletion
 
 class OpenAIWrapper(APIWrapper):
     _model:str = ""
@@ -16,32 +16,32 @@ class OpenAIWrapper(APIWrapper):
                  model:str=cst.MODEL_GPT35, 
                  functions:list[FunctionCaller]=None,
                  prompt:str=cst.SYSTEM_PROMPT):
-        super().__init__()
+        super().__init__(functions)
+
         self._model = model
-        self._function_list = functions
         self._client = OpenAI(api_key=api.get_openai_key())
 
         self._history.append({"role": "system", "content": prompt})
-
-    def create_message_with_prompt(self, prompt:str, message:str):
-        return [
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": message}
-        ]
     
     @staticmethod
     def parse_args(str_args:str) -> dict[str, str]:
         json_obj = json.loads(str_args)
         return json_obj
     
+    def create_chat(self, 
+                    messages:list[dict[str, str]],
+                    temperature:float=0.7, 
+                    tools:list[dict[str, Any]]=None) -> ChatCompletion:
+        return self._client.chat.completions.create(messages=messages,
+                                                    model=self._model,
+                                                    temperature=temperature,
+                                                    tools=tools)
+    
     def ask_for_context(self, sentence:str) -> str:
         prompt = self.serialize_contexts(cst.CONTEXT_PROMPT)
         message = self.create_message_with_prompt(prompt, sentence)
 
-        completion = self._client.chat.completions.create(
-            messages=message,
-            model=cst.MODEL_DEFAULT,
-            temperature=0)
+        completion = self.create_chat(messages=message, temperature=0)
         
         self.log("The kept context for this sentence \"" + 
                   sentence + "\" is: " + 
@@ -64,10 +64,7 @@ class OpenAIWrapper(APIWrapper):
                 self._history.append(self.create_toolcalling_message(result, call.id))
                 
             #automatically send all function answers
-            completion = self._client.chat.completions.create(
-                messages=self._history,
-                model=self._model,
-                temperature=0.7)
+            completion = self.create_chat(messages=self._history)
 
             #return the final AI answer
             return self.parse_reply(completion.choices[0])
@@ -84,22 +81,18 @@ class OpenAIWrapper(APIWrapper):
         if self._function_list is not None:
             context = self.ask_for_context(question)
 
+        fCaller:FunctionCaller = None
         function_description:list[dict[str, Any]] = None
         if context != cst.CONTEXT_UNKNOWN:
-            fCaller = self.get_methods_by_context(context)
+            fCaller = self.get_functions_by_context(context)
             if fCaller is not None:
                 function_description = fCaller.serialize()
                 self.log("Function calling found for the '" + context + "' context")
 
-        self.log(function_description)
-
         self._history.append(self.create_user_message(question))
 
-        completion = self._client.chat.completions.create(
-            messages=self._history,
-            model=self._model,
-            temperature=0.7,
-            tools=function_description)
+        completion = self.create_chat(messages=self._history, 
+                                      tools=function_description)
         
         return self.parse_reply(completion.choices[0], fCaller)
 

@@ -1,14 +1,19 @@
 from Starlight.LM_Studio import constants as cst
 
 class Context():
-    _contexts:list[str] = [cst.CONTEXT_UNKNOWN, 
-                           "Weather", 
-                           "News", 
-                           "DateTime"]
+    _contexts:list[str] = [cst.CONTEXT_UNKNOWN]
 
     @property
     def contexts(self) -> list[str]:
         return self._contexts
+    
+    def append(self, context:str) -> bool:
+        if not self.contains(context):
+            self._contexts.append(context)
+            return True
+        else:
+            print("The following context already exists '" + context + "'")
+            return False
     
     def serialize(self) -> str:
         string = ""
