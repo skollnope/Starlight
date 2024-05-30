@@ -23,6 +23,8 @@ class APIObject():
             self._content["ip"] = ip
             self._content["api_key"] = ""
             self.save_content()
+        elif ip != "" and ip != self.ip:
+            self.ip = ip
 
     @property
     def name(self) -> str:
