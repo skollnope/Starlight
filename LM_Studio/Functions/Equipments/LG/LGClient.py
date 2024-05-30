@@ -1,5 +1,7 @@
 from pywebostv.connection import WebOSClient
 from Starlight.LM_Studio.Functions.API.APIObject import APIObject
+from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, FunctionItem
+from typing import Any
 
 # start a register request to the specified equipment
 def register(name:str, ip:str=""):
@@ -28,3 +30,25 @@ def connect(api_obj:APIObject) -> WebOSClient:
         return None # the current api key isn't valid (anymore ?)
     client.connect()
     return client
+
+register_new_equipment_def: dict[str, Any] = {"name": "register_new_equipment",
+                                              "description": "Register a new equipment to allow API accesses",
+                                              "parameters": {
+                                                  "type":"object",
+                                                  "properties": {
+                                                      "name": {
+                                                          "type": "string",
+                                                          "description": "The name of the new equipment to identify it among all others",
+                                                      },
+                                                      "ip": {
+                                                          "type": "string",
+                                                          "description": "The ip address where the equipment is located, must be in the IPV4 format",
+                                                      },
+                                                  },
+                                                  "required": ["name", "ip"]}}
+def register_new_equipment(args:dict[str, str]) -> str:
+    register(args["name"], args["ip"])
+    return "Finalized"
+
+funcCaller:FunctionCaller = FunctionCaller("Equipment_LG")
+funcCaller.append_function(FunctionItem(register_new_equipment_def, register_new_equipment))
