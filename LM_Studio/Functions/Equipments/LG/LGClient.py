@@ -6,7 +6,7 @@ from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, Funct
 from typing import Any
 
 # start a register request to the specified equipment
-def register(name:str, ip:str=""):
+def register(name:str, ip:str="") -> WebOSClient:
     api:APIObject = APIObject(name, ip)
     if ip != "":
         client = WebOSClient(ip, secure=True)
@@ -23,18 +23,23 @@ def register(name:str, ip:str=""):
             api.api_key = store["client_key"]
             print(f"New equipment '{name}' just registered")
 
+    return client
+
 def connect(api_obj:APIObject) -> WebOSClient:
     if api_obj is None or not api_obj.registered:
         return None # unable to connect to the equipment
     
     client:WebOSClient = None
+    print(api_obj.api_key)
+    store={"client_key": api_obj.api_key}
+    
     try:
         client = WebOSClient(api_obj.ip, secure=True)
         client.connect()
-        client.register({"client_key": api_obj.api_key})
+        client.register(store)
     except:
         print("Can't connect to the equipment")
-        print({"client_key": api_obj.api_key})
+        print(store)
     return client
 
 register_new_equipment_def: dict[str, Any] = {"name": "register_new_equipment",
