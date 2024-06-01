@@ -20,7 +20,6 @@ def register(name:str, ip:str=""):
         if status == WebOSClient.PROMPTED: # requested to valid the connection on the equipment
             print(f"Please accept the connection on the '{name}' equipment")
         elif status == WebOSClient.REGISTERED: # registered
-            print(store)
             api.api_key = store["client_key"]
             print(f"New equipment '{name}' just registered")
 
@@ -35,7 +34,6 @@ def connect(api_obj:APIObject) -> WebOSClient:
         client.register({"client_key": api_obj.api_key})
     except:
         print("Can't connect to the equipment")
-        print(api_obj)
         print({"client_key": api_obj.api_key})
     return client
 
@@ -92,7 +90,7 @@ notify_on_equipment_def: dict[str, Any] = {"name": "notify_on_equipment",
                                                       },
                                                       "message": {
                                                           "type": "string",
-                                                          "description": "The message to show",
+                                                          "description": "The message to be shown",
                                                       }
                                                   },
                                                   "required": ["name", "message"]}}
@@ -103,7 +101,7 @@ def notify_on_equipment(args:dict[str, str]) -> str:
     
     try:
         system = SystemControl(client)
-        system.notify(args["message"], block=False)
+        system.notify(args["message"])
     except Exception as e:
         return "Error while trying to send a notification message on the " + args["name"] + ". Error message: " + repr(e)
 
