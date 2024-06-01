@@ -11,7 +11,7 @@ if not os.path.exists(api_default_directory):
 
 class APIObject():
     _file:str = None
-    _content:dict[str, Any] = None
+    _content:dict[str, Any] = {}
 
     def __init__(self, 
                  name:str,
@@ -60,6 +60,7 @@ class APIObject():
                     self._content = json.loads(content)
                     return True
                 except json.JSONDecodeError:
+                    print("Error while reading the \"" + self._file + "\" file name")
                     return False
         else:
             return False
