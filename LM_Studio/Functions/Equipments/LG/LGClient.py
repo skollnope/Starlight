@@ -36,7 +36,8 @@ def connect(api_obj:APIObject) -> WebOSClient:
     try:
         client = WebOSClient(api_obj.ip, secure=True)
         client.connect()
-        client.register(store)
+        for status in client.register(store):
+            print(status)
     except:
         print("Can't connect to the equipment")
         print(store)
