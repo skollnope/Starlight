@@ -3,43 +3,24 @@ import Starlight.LM_Studio.constants as cst
 
 from Starlight.LM_Studio.Functions import hello_world as hw
 
-def invoke(name:str, args:Any=None):
-    function = FUNCTIONS.get(name)
-    if(function is not None):     
-            return function(args)
-    else:
-        print("No function named: \"" + name + "\" found")
-
-def getFunctions() -> list[dict[str, Any]]:
-    return [
-            hw.hello_world_def,
-            hw.hello_you_def,
-        ]
-
-FUNCTIONS: dict[str, Any] = {
-    hw.hello_world_def["name"]: hw.hello_world,
-    hw.hello_you_def["name"]: hw.hello_you,
-    }
-
 class FunctionItem():
      _description:dict[str, Any]=None
-     _func:Callable[[dict[str, str]], str]=None
+     _func:Callable[[dict[str, str]], Any]=None
 
-     def __init__(self, description:dict[str, Any], func:Callable[[dict[str, str]], str]):
+     def __init__(self, description:dict[str, Any], func:Callable[[dict[str, str]], Any]):
         self._description = description
         self._func = func
 
      @property
      def name(self) -> str:
-         return str(self._description["name"])
+        return str(self._description["name"])
     
      @property
      def desc(self) -> dict[str, Any]:
-          return self._description
+        return self._description
 
      def invoke(self, args:dict[str, str]) -> str:
-         #print("invoking method: " + self.name)
-         return self._func(args)
+        return self._func(args)
 
 class FunctionCaller():    
      _context:str=""
