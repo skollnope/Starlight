@@ -3,10 +3,11 @@ from pywebostv.controls import SystemControl, MediaControl
 
 from Starlight.LM_Studio.Functions.API.APIObject import APIObject
 from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, FunctionItem
-from typing import Any
+from Starlight.LM_Studio.Helpers.Helper_Functions import *
+from typing import Any, Generator
 
 # start a register request to the specified equipment
-def register(name:str, ip:str="") -> WebOSClient:
+def register(name:str, ip:str="") -> Generator[str, None, str]:
     api:APIObject = APIObject(name, ip)
     if ip != "":
         client = WebOSClient(ip, secure=True)
@@ -18,12 +19,12 @@ def register(name:str, ip:str="") -> WebOSClient:
 
     for status in client.register(store):
         if status == WebOSClient.PROMPTED: # requested to valid the connection on the equipment
-            print(f"Please accept the connection on the '{name}' equipment")
+            yield f"Please accept the connection on the '{name}' equipment"
         elif status == WebOSClient.REGISTERED: # registered
             api.api_key = store["client_key"]
-            print(f"New equipment '{name}' just registered")
+            yield f"New equipment '{name}' just registered"
 
-    return client
+    return "Success" if status == WebOSClient.REGISTERED else "Error"
 
 def connect(api_obj:APIObject) -> WebOSClient:
     if api_obj is None or not api_obj.registered:
@@ -37,7 +38,7 @@ def connect(api_obj:APIObject) -> WebOSClient:
         client = WebOSClient(api_obj.ip, secure=True)
         client.connect()
         for status in client.register(store):
-            print(status)
+            status
     except:
         print("Can't connect to the equipment")
         print(store)
@@ -58,9 +59,11 @@ register_new_equipment_def: dict[str, Any] = {"name": "register_new_equipment",
                                                       },
                                                   },
                                                   "required": ["name", "ip"]}}
-def register_new_equipment(args:dict[str, str]) -> str:
-    register(args["name"], args["ip"])
-    return "Finalized"
+def register_new_equipment(args:dict[str, str]) -> Generator[str, None, str]:
+    gen = register(args["name"], args["ip"])
+    for step in gen:
+        yield step
+    return get_generator_result(gen)
 
 pause_equipment_def: dict[str, Any] = {"name": "pause_equipment",
                                               "description": "pause the equipment",
