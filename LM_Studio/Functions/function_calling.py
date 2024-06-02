@@ -2,44 +2,33 @@ from typing import Any, Callable
 import Starlight.LM_Studio.constants as cst 
 
 from Starlight.LM_Studio.Functions import hello_world as hw
-
-def invoke(name:str, args:Any=None):
-    function = FUNCTIONS.get(name)
-    if(function is not None):     
-            return function(args)
-    else:
-        print("No function named: \"" + name + "\" found")
-
-def getFunctions() -> list[dict[str, Any]]:
-    return [
-            hw.hello_world_def,
-            hw.hello_you_def,
-        ]
-
-FUNCTIONS: dict[str, Any] = {
-    hw.hello_world_def["name"]: hw.hello_world,
-    hw.hello_you_def["name"]: hw.hello_you,
-    }
+from Starlight.LM_Studio.Helpers.Helper_Functions import *
 
 class FunctionItem():
      _description:dict[str, Any]=None
-     _func:Callable[[dict[str, str]], str]=None
+     _func:Callable[[dict[str, str]], Any]=None
 
-     def __init__(self, description:dict[str, Any], func:Callable[[dict[str, str]], str]):
+     def __init__(self, description:dict[str, Any], func:Callable[[dict[str, str]], Any]):
         self._description = description
         self._func = func
 
      @property
      def name(self) -> str:
-         return str(self._description["name"])
+        return str(self._description["name"])
     
      @property
      def desc(self) -> dict[str, Any]:
-          return self._description
+        return self._description
 
      def invoke(self, args:dict[str, str]) -> str:
-         #print("invoking method: " + self.name)
-         return self._func(args)
+        result = self._func(args)
+        if isinstance(result, str):
+            return result
+        elif isinstance(result, Generator):
+            for step in result:
+                print(step) # Need to create an Event to allow step explanation by the model maybe
+            return get_generator_result(result)
+        raise TypeError(f"Unknown return type for the following function: {self.name}")
 
 class FunctionCaller():    
      _context:str=""
