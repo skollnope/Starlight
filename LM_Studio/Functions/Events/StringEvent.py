@@ -1,4 +1,4 @@
-class Event:
+class StringEvent:
     def __init__(self):
         self.handlers = []
 
@@ -8,6 +8,6 @@ class Event:
     def unregister(self, handler):
         self.handlers.remove(handler)
 
-    def trigger(self, *args, **kwargs):
+    def trigger(self, arg:str):
         for handler in self.handlers:
-            handler(*args, **kwargs)
+            handler(arg)
