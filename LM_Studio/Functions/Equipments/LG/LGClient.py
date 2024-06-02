@@ -120,4 +120,4 @@ lg_general_functions.append_function(FunctionItem(notify_on_equipment_def, notif
 def t(string):
     print(f"function yield: {string}")
 
-lg_general_functions._event.register(t)
+lg_general_functions._yield_event.link(t)
