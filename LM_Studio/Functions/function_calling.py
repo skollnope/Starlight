@@ -2,7 +2,7 @@ from typing import Any, Callable
 import Starlight.LM_Studio.constants as cst 
 
 from Starlight.LM_Studio.Functions import hello_world as hw
-from Events.Event import StringEvent
+from LM_Studio.Functions.Events.StringEvent import StringEvent
 from Starlight.LM_Studio.Helpers.Helper_Functions import *
 
 class FunctionItem():
