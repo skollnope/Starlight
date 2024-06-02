@@ -22,9 +22,8 @@ def register(name:str, ip:str="") -> Generator[str, None, str]:
             yield f"Please accept the connection on the '{name}' equipment"
         elif status == WebOSClient.REGISTERED: # registered
             api.api_key = store["client_key"]
-            yield f"New equipment '{name}' just registered"
-
-    return "Success" if status == WebOSClient.REGISTERED else "Error"
+            return f"New equipment '{name}' just registered"
+    return "Error"
 
 def connect(api_obj:APIObject) -> WebOSClient:
     if api_obj is None or not api_obj.registered:
@@ -60,10 +59,7 @@ register_new_equipment_def: dict[str, Any] = {"name": "register_new_equipment",
                                                   },
                                                   "required": ["name", "ip"]}}
 def register_new_equipment(args:dict[str, str]) -> Generator[str, None, str]:
-    gen = register(args["name"], args["ip"])
-    for step in gen:
-        yield step
-    return get_generator_result(gen)
+    return register(args["name"], args["ip"])
 
 pause_equipment_def: dict[str, Any] = {"name": "pause_equipment",
                                               "description": "pause the equipment",
