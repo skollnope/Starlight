@@ -2,6 +2,7 @@ from typing import Any, Callable
 import Starlight.LM_Studio.constants as cst 
 
 from Starlight.LM_Studio.Functions import hello_world as hw
+from Starlight.LM_Studio.Helpers.Helper_Functions import *
 
 class FunctionItem():
      _description:dict[str, Any]=None
@@ -20,7 +21,15 @@ class FunctionItem():
         return self._description
 
      def invoke(self, args:dict[str, str]) -> str:
-        return self._func(args)
+        t = get_return_type(self._func)
+        if t is str:
+            return self._func(args)
+        elif t is Generator:
+            gen = self._func(args)
+            for step in gen:
+                print(step) # Need to create an Event maybe to expose the yield to the model
+            return get_generator_result(gen)
+        raise TypeError(f"Unknown return type for the following function: {self.name}")
 
 class FunctionCaller():    
      _context:str=""
