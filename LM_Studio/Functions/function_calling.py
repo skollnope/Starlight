@@ -25,12 +25,9 @@ class FunctionItem():
         if isinstance(result, str):
             return result
         elif isinstance(result, Generator):
-            try:
-                for step in result:
-                    print(step) # Need to create an Event maybe to expose the yield to the model
-                next(result)
-            except StopIteration as e:
-                return str(e.value)
+            for step in result:
+                print(step) # Need to create an Event maybe to expose the yield to the model
+            return get_generator_result(result)
         raise TypeError(f"Unknown return type for the following function: {self.name}")
 
 class FunctionCaller():    
