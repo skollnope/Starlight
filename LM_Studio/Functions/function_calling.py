@@ -2,17 +2,18 @@ from typing import Any, Callable
 import Starlight.LM_Studio.constants as cst 
 
 from Starlight.LM_Studio.Functions import hello_world as hw
-from LM_Studio.Functions.Events.StringEvent import StringEvent
+from Starlight.LM_Studio.Functions.Events.StringEvent import StringEvent
 from Starlight.LM_Studio.Helpers.Helper_Functions import *
 
 class FunctionItem():
     _description:dict[str, Any]=None
     _func:Callable[[dict[str, str]], Any]=None
-    _yield_event:StringEvent = StringEvent()
+    _yield_event:StringEvent = None
 
     def __init__(self, description:dict[str, Any], func:Callable[[dict[str, str]], Any]):
         self._description = description
         self._func = func
+        self._yield_event = StringEvent()
 
     @property
     def name(self) -> str:
@@ -28,28 +29,30 @@ class FunctionItem():
             return result
         elif isinstance(result, Generator):
             for step in result:
-                self._yield_event.trigger(step)
-                #print(step) # Need to create an Event to allow step explanation by the model maybe
+                self._yield_event.emit(step)
             return get_generator_result(result)
         raise TypeError(f"Unknown return type for the following function: {self.name}")
 
 class FunctionCaller():    
     _context:str=""
     _function_list:list[FunctionItem]=[]
-    _event:StringEvent = StringEvent()
+    _yield_event:StringEvent = None
 
     def __init__(self, context:str, functions:list[FunctionItem]=[]):
         self._context = context
-        self._function_list = functions
+        for f in functions:
+            self.append_function(f)
+        self._yield_event = StringEvent()
     
     def append_function(self, func:FunctionItem):
         if func is not None:
             self._function_list.append(func)
-            func._yield_event.register(self._event.trigger)
+            func._yield_event.link(self._yield_event.emit)
     
     def remove_function(self, name:str):
         func = self.get_function(name)
         if func is not None:
+            func._yield_event.unlink(self._yield_event.emit)
             self._function_list.remove(func)
 
     @property
