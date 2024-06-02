@@ -2,13 +2,13 @@ from typing import Any, Callable
 import Starlight.LM_Studio.constants as cst 
 
 from Starlight.LM_Studio.Functions import hello_world as hw
-from Events.Event import Event
+from Events.Event import StringEvent
 from Starlight.LM_Studio.Helpers.Helper_Functions import *
 
 class FunctionItem():
     _description:dict[str, Any]=None
     _func:Callable[[dict[str, str]], Any]=None
-    _yield_event:Event = Event()
+    _yield_event:StringEvent = StringEvent()
 
     def __init__(self, description:dict[str, Any], func:Callable[[dict[str, str]], Any]):
         self._description = description
@@ -29,14 +29,14 @@ class FunctionItem():
         elif isinstance(result, Generator):
             for step in result:
                 self._yield_event.trigger(step)
-                print(step) # Need to create an Event to allow step explanation by the model maybe
+                #print(step) # Need to create an Event to allow step explanation by the model maybe
             return get_generator_result(result)
         raise TypeError(f"Unknown return type for the following function: {self.name}")
 
 class FunctionCaller():    
     _context:str=""
     _function_list:list[FunctionItem]=[]
-    _event:Event = Event()
+    _event:StringEvent = StringEvent()
 
     def __init__(self, context:str, functions:list[FunctionItem]=[]):
         self._context = context
