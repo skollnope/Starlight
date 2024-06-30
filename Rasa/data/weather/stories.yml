@@ -1,7 +1,0 @@
-version: "3.1"
-
-stories:
-- story: weather request
-  steps:
-    - intent: weather
-    - action: utter_weather
