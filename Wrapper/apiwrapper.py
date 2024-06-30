@@ -1,9 +1,9 @@
 from typing import Any
 from abc import ABC, abstractmethod
-from Starlight.LM_Studio import constants as cst
-from Starlight.LM_Studio.Functions import function_calling as func
-from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, FunctionItem
-from Starlight.LM_Studio.context import Context
+from Starlight import constants as cst
+from Starlight.Functions import function_calling as func
+from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
+from Starlight.context import Context
 
 class APIWrapper(ABC):
     _function_list: list[FunctionCaller] = None

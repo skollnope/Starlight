@@ -1,7 +1,7 @@
 from openai import OpenAI
 
-from Starlight.LM_Studio import constants as cst
-from Starlight.LM_Studio import APIAccess as api
+from Starlight import constants as cst
+from Starlight import APIAccess as api
 
 # Point to the local server
 client = OpenAI(api_key=api.get_openai_key())

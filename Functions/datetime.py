@@ -1,7 +1,7 @@
 from datetime import datetime
 import pytz
 from typing import Any
-from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, FunctionItem
+from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
 
 get_local_time_def: dict[str, Any] = {"name": "get_local_time",
                                       "description": "return a local date an time from an unknown location"}

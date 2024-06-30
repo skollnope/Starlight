@@ -1,4 +1,4 @@
-from Starlight.LM_Studio import constants as cst
+from Starlight import constants as cst
 
 class Context():
     _contexts:list[str] = [cst.CONTEXT_UNKNOWN]

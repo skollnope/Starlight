@@ -1,9 +1,9 @@
 from pywebostv.connection import WebOSClient
 from pywebostv.controls import SystemControl, MediaControl
 
-from Starlight.LM_Studio.Functions.API.APIObject import APIObject
-from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, FunctionItem
-from Starlight.LM_Studio.Helpers.Helper_Functions import *
+from Starlight.Functions.API.APIObject import APIObject
+from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
+from Starlight.Helpers.Helper_Functions import *
 from typing import Any, Generator
 
 # start a register request to the specified equipment

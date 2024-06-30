@@ -1,5 +1,5 @@
 from openai import OpenAI
-from Starlight.LM_Studio import constants as cst
+from Starlight import constants as cst
 from LM_Studio.Functions import function_calling as funcs
 
 # Point to the local server
