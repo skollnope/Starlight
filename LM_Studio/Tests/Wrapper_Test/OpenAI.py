@@ -1,5 +1,4 @@
 from Starlight.LM_Studio.Wrapper.openai_wrapper import OpenAIWrapper
-from Starlight.LM_Studio.Functions.function_calling import FunctionCaller, FunctionItem
 import Starlight.LM_Studio.Functions.datetime as dt
 import Starlight.LM_Studio.Functions.Equipments.LG.LGClient as lgc
 

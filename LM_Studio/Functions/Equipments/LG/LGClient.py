@@ -116,3 +116,8 @@ lg_general_functions:FunctionCaller = FunctionCaller("Equipment_LG")
 lg_general_functions.append_function(FunctionItem(register_new_equipment_def, register_new_equipment))
 lg_general_functions.append_function(FunctionItem(pause_equipment_def, pause_equipment))
 lg_general_functions.append_function(FunctionItem(notify_on_equipment_def, notify_on_equipment))
+
+def t(string):
+    print(f"function yield: {string}")
+
+lg_general_functions._yield_event.link(t)
