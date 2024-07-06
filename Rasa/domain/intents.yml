@@ -1,9 +1,0 @@
-version: '3.1'
-
-intents:
-- goodbye
-- greet
-- weather
-- time
-- country_time
-- city_time
