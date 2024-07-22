@@ -2,6 +2,7 @@ from Starlight.Wrapper.apiwrapper import APIWrapper
 from Starlight import constants as cst
 from Starlight import APIAccess as api
 from Starlight.Functions.function_calling import FunctionCaller
+from Starlight import context
 
 import json
 from typing import Any
@@ -38,7 +39,7 @@ class OpenAIWrapper(APIWrapper):
                                                     tools=tools)
     
     def ask_for_context(self, sentence:str) -> str:
-        prompt = self.serialize_contexts(cst.CONTEXT_PROMPT)
+        prompt = self.serialize_contexts(context.DEFAULT_CTX_PROMPT)
         message = self.create_message_with_prompt(prompt, sentence)
 
         completion = self.create_chat(messages=message, temperature=0)
@@ -47,7 +48,7 @@ class OpenAIWrapper(APIWrapper):
                   sentence + "\" is: " + 
                   completion.choices[0].message.content)
             
-        return completion.choices[0].message.content
+        return context.ContextObject.deserialize(completion.choices[0].message.content)
     
     def parse_reply(self, choice:Choice, function_caller:FunctionCaller=None) -> str:
         finish_reason = choice.finish_reason
@@ -83,7 +84,7 @@ class OpenAIWrapper(APIWrapper):
 
         fCaller:FunctionCaller = None
         function_description:list[dict[str, Any]] = None
-        if context != cst.CONTEXT_UNKNOWN:
+        if context != None:
             fCaller = self.get_functions_by_context(context)
             if fCaller is not None:
                 function_description = fCaller.serialize()

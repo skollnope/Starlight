@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from Starlight import constants as cst
 from Starlight.Functions import function_calling as func
 from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
-from Starlight.context import Context
+from Starlight.context import *
 
 class APIWrapper(ABC):
     _function_list: list[FunctionCaller] = None
@@ -71,7 +71,7 @@ class APIWrapper(ABC):
         """
         pass
 
-    def get_functions_by_context(self, context: str) -> FunctionCaller:
+    def get_functions_by_context(self, context: ContextObject) -> FunctionCaller:
         for func in self._function_list:
             if(func.context == context):
                 return func

@@ -1,9 +1,10 @@
 from typing import Any, Callable
-import Starlight.constants as cst 
 
+import Starlight.constants as cst 
 from Starlight.Functions import hello_world as hw
 from Starlight.Functions.Events.StringEvent import StringEvent
 from Starlight.Helpers.Helper_Functions import *
+from Starlight.context import ContextObject
 
 class FunctionItem():
     _description:dict[str, Any]=None
@@ -34,11 +35,11 @@ class FunctionItem():
         raise TypeError(f"Unknown return type for the following function: {self.name}")
 
 class FunctionCaller():    
-    _context:str=""
+    _context:ContextObject
     _function_list:list[FunctionItem]=[]
     _yield_event:StringEvent = None
 
-    def __init__(self, context:str, functions:list[FunctionItem]=[]):
+    def __init__(self, context:ContextObject, functions:list[FunctionItem]=[]):
         self._context = context
         for f in functions:
             self.append_function(f)
@@ -60,7 +61,7 @@ class FunctionCaller():
         return self.functions.count
 
     @property
-    def context(self) -> str:
+    def context(self) -> ContextObject:
         return self._context
     
     @property
