@@ -2,7 +2,7 @@ from Starlight.Wrapper.apiwrapper import APIWrapper
 from Starlight import constants as cst
 from Starlight import APIAccess as api
 from Starlight.Functions.function_calling import FunctionCaller
-from Starlight import context
+from Starlight.context import *
 
 import json
 from typing import Any
@@ -38,8 +38,8 @@ class OpenAIWrapper(APIWrapper):
                                                     temperature=temperature,
                                                     tools=tools)
     
-    def ask_for_context(self, sentence:str) -> str:
-        prompt = self.serialize_contexts(context.DEFAULT_CTX_PROMPT)
+    def ask_for_context(self, sentence:str) -> list[ContextObject]:
+        prompt = self.serialize_contexts(DEFAULT_CTX_PROMPT)
         message = self.create_message_with_prompt(prompt, sentence)
 
         completion = self.create_chat(messages=message, temperature=0)
@@ -48,7 +48,8 @@ class OpenAIWrapper(APIWrapper):
                   sentence + "\" is: " + 
                   completion.choices[0].message.content)
             
-        return context.ContextObject.deserialize(completion.choices[0].message.content)
+        contexts = ContextObject.deserialize(completion.choices[0].message.content)
+        return contexts
     
     def parse_reply(self, choice:Choice, function_caller:FunctionCaller=None) -> str:
         finish_reason = choice.finish_reason
@@ -78,17 +79,17 @@ class OpenAIWrapper(APIWrapper):
         pass
     
     def ask_something(self, question:str) -> str:
-        context = cst.CONTEXT_UNKNOWN
+        context: list[ContextObject] = None
         if self._function_list is not None:
             context = self.ask_for_context(question)
 
-        fCaller:FunctionCaller = None
+        fCaller:list[FunctionCaller] = None
         function_description:list[dict[str, Any]] = None
-        if context != None:
+        if context:
             fCaller = self.get_functions_by_context(context)
-            if fCaller is not None:
-                function_description = fCaller.serialize()
-                self.log("Function calling found for the '" + context + "' context")
+            if fCaller:
+                function_description = fCaller[0].serialize() #TODO: browse them all instead of the first
+                self.log("Function calling found for the '" + '|'.join(str(x) for x in context) + "' context")
 
         self._history.append(self.create_user_message(question))
 

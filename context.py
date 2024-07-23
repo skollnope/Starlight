@@ -5,7 +5,7 @@ import json
 DEFAULT_CTX_PROMPT = ("There is a list of Json object, you have to only answer a list, only, or none of those object which are relevant for the asked sentence. "
                     " Inside each Json Object, there is a 'value' key which is relevant to know the associated context of the object."
                     " If none of them stuck with the sentence, only answer with 'None'."
-                    " If you find one or more, you must format you answer like: [{'choice1'}, {'choice2'}, ..., {'choiceN'}]")
+                    " If you find one or more, you must format you answer like: {\"choices\":[{\"type\":\"choice_type1\", \"value\":\"choice_value1\"}, ..., {\"type\":\"choice_typeN\", \"value\":\"choice_valueN\"}]}")
 
 
 TYPE_FUNCTION_CALLING:str = "Function_Calling"
@@ -36,7 +36,10 @@ class ContextObject(ABC):
             return None
         
         obj = json.loads(json_str)
-        return ContextObject(obj["value"], obj["type"])
+        lst = []
+        for o in obj["choices"]:
+            lst.append(ContextObject(o["value"], o["type"]))
+        return lst # TODO: for each obj in choices create context
 
     def __str__(self) -> str:
         json_obj = {'type': self.type, 'value':self.context}

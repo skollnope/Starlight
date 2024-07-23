@@ -71,11 +71,16 @@ class APIWrapper(ABC):
         """
         pass
 
-    def get_functions_by_context(self, context: ContextObject) -> FunctionCaller:
-        for func in self._function_list:
-            if(func.context == context):
-                return func
-        return None
+    def get_functions_by_context(self, context: list[ContextObject]) -> FunctionCaller:
+        funcs = []
+        remaining_funcs = self._function_list.copy() # create a copy to don't modify the reference
+        for ctx in context:
+            for func in remaining_funcs:
+                if(func.context == ctx):                    
+                    remaining_funcs.remove(func) # already found, no need to re-browse it
+                    funcs.append(func) 
+                    break
+        return funcs
 
     @abstractmethod
     def parse_reply(answer:Any):
