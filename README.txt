@@ -5,6 +5,13 @@ Needs:
 	- Python 3.8 or later
 	- Rasa 3.1
 
+libraries:
+	- OpenAi
+	- OpenAi-Whisper
+	- numpy
+	- pywebos
+	- ...
+
 Recommanded:
 	- install anaconda to use Python, Rasa and other libraries
 
