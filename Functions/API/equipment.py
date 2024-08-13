@@ -43,6 +43,11 @@ class Equipment():
         elif ip != "" and ip != self.ip:
             self.ip = ip
 
+    def __str__(self) -> str:
+        res = ""
+        json.dump(self._content, res)
+        return res
+
     @property
     def name(self) -> str:
         return self._content["name"]
@@ -87,7 +92,13 @@ class Equipment():
         else:
             return False
 
-
     def save_content(self):
         with open(self._file, 'w') as file:
             json.dump(self._content, file, indent=4)
+
+    @staticmethod
+    def serialize(equipments:list) -> str:
+        string = ""
+        for e in equipments:
+            string += str(e) + ","
+        return string [:-1]
