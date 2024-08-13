@@ -108,3 +108,16 @@ class Equipment():
         for e in equipments:
             string += str(e) + ","
         return string [:-1]
+    
+    @staticmethod
+    def deserialize(json_str:str) -> list:
+        if json_str == "None": 
+            return None
+        
+        obj = json.loads(json_str)
+        equipments = []
+        for o in obj["choices"]:
+            equipments.append(Equipment(o["name"], o["room"]))
+        return equipments
+
+        
