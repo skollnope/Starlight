@@ -5,7 +5,7 @@ from Starlight import APIAccess as api
 from Starlight.Helpers.Helper_Functions import *
 from Starlight.Helpers.messagehelper import *
 from Starlight.context import *
-from Functions.API.equipments import Equipment
+from Functions.API.equipment import Equipment
 
 class SentenceSniffer(ABC):
     _client:Any=None
@@ -34,7 +34,7 @@ class SentenceSniffer(ABC):
         message = create_message_with_prompt(prompt, sentence)
 
         answ = self.__ask__(message)
-        return None
+        return None #TODO: return the considered equipemnts
 
 class OpenAISniffer(SentenceSniffer):
     def __init__(self, model:str):
