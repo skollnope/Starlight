@@ -1,7 +1,7 @@
 from pywebostv.connection import WebOSClient
 from pywebostv.controls import SystemControl, MediaControl
 
-from Starlight.Functions.API.APIObject import APIObject
+from Functions.API.equipments import Equipment
 from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
 from Starlight.Helpers.Helper_Functions import *
 from Starlight.context import ContextObject
@@ -9,7 +9,7 @@ from typing import Any, Generator
 
 # start a register request to the specified equipment
 def register(name:str, ip:str="") -> Generator[str, None, str]:
-    api:APIObject = APIObject(name, ip)
+    api:Equipment = Equipment(name, ip)
     if ip != "":
         client = WebOSClient(ip, secure=True)
     else:
@@ -26,7 +26,7 @@ def register(name:str, ip:str="") -> Generator[str, None, str]:
             return f"New equipment '{name}' just registered"
     return "Error"
 
-def connect(api_obj:APIObject) -> WebOSClient:
+def connect(api_obj:Equipment) -> WebOSClient:
     if api_obj is None or not api_obj.registered:
         return None # unable to connect to the equipment
     
@@ -74,7 +74,7 @@ pause_equipment_def: dict[str, Any] = {"name": "pause_equipment",
                                                   },
                                                   "required": ["name"]}}
 def pause_equipment(args:dict[str, str]) -> str:
-    client = connect(APIObject(args["name"]))
+    client = connect(Equipment(args["name"]))
     if client is None:
         return "Error while trying to connect to " + args["name"]
     try:
@@ -101,7 +101,7 @@ notify_on_equipment_def: dict[str, Any] = {"name": "notify_on_equipment",
                                                   },
                                                   "required": ["name", "message"]}}
 def notify_on_equipment(args:dict[str, str]) -> str:
-    client = connect(APIObject(args["name"]))
+    client = connect(Equipment(args["name"]))
     if client is None:
         return "Error while trying to connect to " + args["name"]
     

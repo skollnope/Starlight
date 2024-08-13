@@ -17,7 +17,7 @@ if not os.path.exists(api_default_directory):
 
 # TODO: allow to "serialize" the object to allow the assisant to know them all
 
-class APIObject():
+class Equipment():
     _file:str = None
     _content:dict[str, Any] = {}
 
