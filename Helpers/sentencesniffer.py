@@ -5,7 +5,7 @@ from Starlight import APIAccess as api
 from Starlight.Helpers.Helper_Functions import *
 from Starlight.Helpers.messagehelper import *
 from Starlight.context import *
-from Functions.API.equipment import Equipment
+from Functions.API.equipment import Equipment, DEFAULT_EQ_PROMPT
 
 class SentenceSniffer(ABC):
     _client:Any=None
@@ -30,11 +30,11 @@ class SentenceSniffer(ABC):
         return ContextObject.deserialize(answ)
 
     def request4Equipments(self, sentence:str) -> list[Equipment]:
-        prompt = "Prompt for the Equipment" + Equipment.serialize(self._equipments) #TODO: Need to serialize all equipments
+        prompt = DEFAULT_EQ_PROMPT + Equipment.serialize(self._equipments)
         message = create_message_with_prompt(prompt, sentence)
 
         answ = self.__ask__(message)
-        return None #TODO: return the considered equipemnts
+        return Equipment.deserialize(answ)
 
 class OpenAISniffer(SentenceSniffer):
     def __init__(self, model:str):
