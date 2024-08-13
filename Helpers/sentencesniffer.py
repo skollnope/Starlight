@@ -7,7 +7,7 @@ from Starlight.Helpers.messagehelper import *
 from Starlight.context import *
 from Starlight.Functions.API.APIObject import APIObject
 
-class ContextSniffer(ABC):
+class SentenceSniffer(ABC):
     _client:Any=None
     _model:str=None    
     _contexts:Context = Context()
@@ -17,18 +17,19 @@ class ContextSniffer(ABC):
         self._model=model
 
     @abstractmethod
-    def request4context(self, sentence:str) -> str:
+    def request4contexts(self, sentence:str) -> list[ContextObject]:
         pass
 
-    def request4Equipment(self, sentence:str) -> APIObject:
+    @abstractmethod
+    def request4Equipments(self, sentence:str) -> list[APIObject]:
         pass
 
-class OpenAIContextSniffer(ContextSniffer):
+class OpenAISniffer(SentenceSniffer):
     def __init__(self, model:str):
-        super. __init__(model)
+        super.__init__(model)
         self._client = openai.OpenAI(api_key=get_openai_key())
 
-    def request4context(self, sentence: str) -> str:
+    def request4contexts(self, sentence: str) -> list[ContextObject]:
         prompt = DEFAULT_CTX_PROMPT + self._contexts.serialize()
         message = create_message_with_prompt(prompt, sentence)
 

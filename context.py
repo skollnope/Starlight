@@ -39,7 +39,7 @@ class ContextObject(ABC):
         lst = []
         for o in obj["choices"]:
             lst.append(ContextObject(o["value"], o["type"]))
-        return lst # TODO: for each obj in choices create context
+        return lst
 
     def __str__(self) -> str:
         json_obj = {'type': self.type, 'value':self.context}
