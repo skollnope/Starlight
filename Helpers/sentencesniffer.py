@@ -30,7 +30,7 @@ class SentenceSniffer(ABC):
         return ContextObject.deserialize(answ)
 
     def request4Equipments(self, sentence:str) -> list[Equipment]:
-        prompt = "Prompt for the Equipment" + "" #TODO: Need to serialize all equipments
+        prompt = "Prompt for the Equipment" + Equipment.serialize(self._equipments) #TODO: Need to serialize all equipments
         message = create_message_with_prompt(prompt, sentence)
 
         answ = self.__ask__(message)
