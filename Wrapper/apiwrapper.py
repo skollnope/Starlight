@@ -26,29 +26,6 @@ class APIWrapper(ABC):
     def print_history(self):
         for h in self._history:
             print(h["role"] + ": " + h["content"])
-    
-    @staticmethod
-    def create_user_message(message:str):
-        return {"role": "user", "content": message}
-    
-    @staticmethod
-    def create_assistant_message(message:str):
-        return {"role": "assistant", "content": message}
-    
-    @staticmethod
-    def create_assistant_toolcalls(tool_calls:list[dict[str, Any]]=None):
-        return {"role": "assistant", "tool_calls": tool_calls}
-    
-    @staticmethod
-    def create_toolcalling_message(message:str, id:str):
-        return {"role": "tool", "content": message, "tool_call_id": id}
-        
-    @staticmethod
-    def create_message_with_prompt(prompt:str, message:str):
-        return [
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": message}
-        ]
 
     def serialize_contexts(self, prompt:str):
         return prompt + self._contexts.serialize()

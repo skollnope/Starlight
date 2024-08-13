@@ -3,6 +3,7 @@ from Starlight import constants as cst
 from Starlight import APIAccess as api
 from Starlight.Functions.function_calling import FunctionCaller
 from Starlight.context import *
+from Starlight.Helpers.messagehelper import *
 
 import json
 from typing import Any
@@ -40,7 +41,7 @@ class OpenAIWrapper(APIWrapper):
     
     def ask_for_context(self, sentence:str) -> list[ContextObject]:
         prompt = self.serialize_contexts(DEFAULT_CTX_PROMPT)
-        message = self.create_message_with_prompt(prompt, sentence)
+        message = create_message_with_prompt(prompt, sentence)
 
         completion = self.create_chat(messages=message, temperature=0)
         
@@ -57,13 +58,13 @@ class OpenAIWrapper(APIWrapper):
 
         if finish_reason == "tool_calls" and function_caller is not None:
             #first, store the answer inside the history
-            self._history.append(self.create_assistant_toolcalls(choice.message.tool_calls))
+            self._history.append(create_assistant_toolcalls(choice.message.tool_calls))
 
             #call each function requested, then add the answers to the history
             for call in choice.message.tool_calls:
                 self.log("trying to invoke '" + call.function.name + "' method with \n" + call.function.arguments + " args")
                 result = function_caller.get_function(call.function.name).invoke(self.parse_args(call.function.arguments))
-                self._history.append(self.create_toolcalling_message(result, call.id))
+                self._history.append(create_toolcalling_message(result, call.id))
                 
             #automatically send all function answers
             completion = self.create_chat(messages=self._history)
@@ -73,7 +74,7 @@ class OpenAIWrapper(APIWrapper):
 
         elif finish_reason == "stop":
             #only text answer, just add it to the history then return the answer
-            self._history.append(self.create_assistant_message(choice.message.content))
+            self._history.append(create_assistant_message(choice.message.content))
             return choice.message.content
 
         pass
@@ -91,7 +92,7 @@ class OpenAIWrapper(APIWrapper):
                 function_description = fCaller[0].serialize() #TODO: browse them all instead of the first
                 self.log("Function calling found for the '" + '|'.join(str(x) for x in context) + "' context")
 
-        self._history.append(self.create_user_message(question))
+        self._history.append(create_user_message(question))
 
         completion = self.create_chat(messages=self._history, 
                                       tools=function_description)
