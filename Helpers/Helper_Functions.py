@@ -10,8 +10,3 @@ def get_generator_result(gen: Generator[Any, Any, str]) -> str:
     except StopIteration as e:
         return str(e.value)  # Output: the result of the generators
     return None # is not ended, return None
-
-def isOpenAIModel(model:str) -> bool:
-    if(model.startswith("gpt")):
-        return True
-    return False
