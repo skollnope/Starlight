@@ -42,7 +42,7 @@ class ContextObject(ABC):
         return lst
 
     def __str__(self) -> str:
-        json_obj = {'type': self.type, 'value':self.context}
+        json_obj = {'type':self.type, 'value':self.context}
         return json.dumps(json_obj)
 
 class Context():
