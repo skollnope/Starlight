@@ -1,7 +1,7 @@
 from pywebostv.connection import WebOSClient
 from pywebostv.controls import SystemControl, MediaControl
 
-from Functions.API.equipments import Equipment
+from Functions.API.equipment import Equipment
 from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
 from Starlight.Helpers.Helper_Functions import *
 from Starlight.context import ContextObject
