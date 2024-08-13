@@ -5,6 +5,12 @@ import json
 api_default_directory:str = "c:/Starlight/APIs"
 api_extension_file:str = ".txt"
 
+DEFAULT_EQ_PROMPT=("There is a list of Json object, you have to only answer a list, only, or none of those object which are relevant for the asked sentence. "
+                   " Inside each Json Object, there are a 'name' and a 'room' key which are relevant to know the associated equipment the sentence ask to use."
+                   " If the name of the requested equipment doesn't stuck exaclty with any of the given ones, try to find the nearest. But if there isn't, only reply with 'None'."
+                   " Also, if the room isn't specified, return the first equipment where the name is correlated"
+                   " If you find one or more, you must format you answer like: {\"choices\":[{\"type\":\"choice_type1\", \"value\":\"choice_value1\"}, ..., {\"type\":\"choice_typeN\", \"value\":\"choice_valueN\"}]}")
+
 
 if not os.path.exists(api_default_directory):
     os.makedirs(api_default_directory)
