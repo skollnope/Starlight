@@ -22,7 +22,7 @@ if not os.path.exists(api_default_directory):
    - Name = the name you want to give to the object (TV, HIFI, other)
    - Room = the room the object is located (can be null) !!!!!!!!!!! TODO: add it to the file and store the files less flat
    - ip = the ip to reach the object
-   - constructor = the manufacturer, usually used to know which kind of API protocole is needed for the equipment
+   - api_name = the manufacturer name, usually used to know which kind of API protocole is needed for the equipment
    
    - the api_key property is a key made to identify the requester (eq. to SSH)
    """
@@ -37,7 +37,7 @@ class Equipment():
                  name:str= "",
                  room:str = "",
                  ip:str="",
-                 constructor:str="unknown",
+                 api_name:str="unknown",
                  file:str=""):
 
         if file:
@@ -59,6 +59,7 @@ class Equipment():
             self._content["name"] = name
             self._content["ip"] = ip
             self._content["room"] = room
+            self._content["api_name"] = api_name
             self._content["api_key"] = ""
             self.save_content()
         elif ip != "" and ip != self.ip:
@@ -76,6 +77,10 @@ class Equipment():
     @property
     def ip(self) -> str:
         return self._content["ip"]
+    
+    @property
+    def api_name(self) -> str:
+        return self._content["api_name"]
     
     @ip.setter
     def ip(self, ip:str):
@@ -132,8 +137,13 @@ class Equipment():
         obj = json.loads(json_str)
         equipments = []
         for o in obj["choices"]:
-            equipments.append(Equipment(o["name"], o["room"]))
+            equipments.append(Equipment(name=o["name"], room=o["room"]))
         return equipments
+
+
+
+
+
 
 """ returns all the known equipments from the specified directory
 
