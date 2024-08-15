@@ -4,6 +4,7 @@ from Starlight import APIAccess as api
 from Starlight.Functions.function_calling import FunctionCaller
 from Starlight.context import *
 from Starlight.Helpers.messagehelper import *
+from Starlight.Helpers.sentencesniffer import OpenAISniffer
 
 import json
 from typing import Any
@@ -19,6 +20,7 @@ class OpenAIWrapper(APIWrapper):
                  functions:list[FunctionCaller]=None,
                  prompt:str=cst.SYSTEM_PROMPT):
         super().__init__(functions)
+        self._sentenceSniffer = OpenAISniffer(model=model)
 
         self._model = model
         self._client = OpenAI(api_key=api.get_openai_key())
