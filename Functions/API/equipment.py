@@ -1,5 +1,6 @@
 from typing import Any
 import os
+from os import walk
 import json
 
 api_default_directory:str = "c:/Starlight/APIs"
@@ -30,7 +31,15 @@ class Equipment():
     def __init__(self, 
                  name:str,
                  room:str = "",
-                 ip:str=""):
+                 ip:str="",
+                 file:str=""):
+
+        if file:
+            self._file = file
+            if not self.read_file_content():
+                raise "The specified file doesn't exist or is empty"
+            else:
+                return
 
         # define the file location
         if room:
@@ -120,4 +129,16 @@ class Equipment():
             equipments.append(Equipment(o["name"], o["room"]))
         return equipments
 
-        
+""" returns all the known equipments from the specified directory
+
+    return: list[Equipment]
+"""
+def getAllEquipments(dir:str = api_default_directory) -> list[Equipment]:
+    filenames = next(walk(dir), (None, None, []))[2]  # [] if no file
+    if not filenames:
+        return []
+    
+    eq:list[Equipment] = []
+    for f in filenames:
+        eq.append(Equipment(file=f))
+    return eq
