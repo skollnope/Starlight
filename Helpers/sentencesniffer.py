@@ -7,8 +7,9 @@ from Starlight.Helpers.messagehelper import *
 from Starlight.context import *
 from Functions.API.equipment import Equipment, DEFAULT_EQ_PROMPT
 
+from openai import OpenAI
+
 class SentenceSniffer(ABC):
-    _client:Any=None
     _model:str=None    
     _contexts:Context = Context()
     _equipments:list[Equipment] = []
@@ -37,13 +38,15 @@ class SentenceSniffer(ABC):
         return Equipment.deserialize(answ)
 
 class OpenAISniffer(SentenceSniffer):
+    _client:OpenAI=None
+
     def __init__(self, model:str):
         super.__init__(model)
-        self._client = openai.OpenAI(api_key=get_openai_key())
+        self._client = OpenAI(api_key=get_openai_key())
 
     def __ask__(self, messages, temperature=0) -> str:
         completion = self._client.chat.completions.create(messages=messages,
                                                     model=self._model,
-                                                    temperature=0)
+                                                    temperature=temperature)
         return completion.choices[0].message.content
         
