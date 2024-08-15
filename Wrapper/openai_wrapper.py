@@ -25,6 +25,7 @@ class OpenAIWrapper(APIWrapper):
         self._model = model
         self._client = OpenAI(api_key=api.get_openai_key())
 
+        prompt += ""
         self._history.append({"role": "system", "content": prompt})
     
     @staticmethod
@@ -40,19 +41,6 @@ class OpenAIWrapper(APIWrapper):
                                                     model=self._model,
                                                     temperature=temperature,
                                                     tools=tools)
-    
-    def ask_for_context(self, sentence:str) -> list[ContextObject]:
-        prompt = self.serialize_contexts(DEFAULT_CTX_PROMPT)
-        message = create_message_with_prompt(prompt, sentence)
-
-        completion = self.create_chat(messages=message, temperature=0)
-        
-        self.log("The kept context for this sentence \"" + 
-                  sentence + "\" is: " + 
-                  completion.choices[0].message.content)
-            
-        contexts = ContextObject.deserialize(completion.choices[0].message.content)
-        return contexts
     
     def parse_reply(self, choice:Choice, function_caller:FunctionCaller=None) -> str:
         finish_reason = choice.finish_reason
@@ -84,7 +72,7 @@ class OpenAIWrapper(APIWrapper):
     def ask_something(self, question:str) -> str:
         context: list[ContextObject] = None
         if self._function_list is not None:
-            context = self.ask_for_context(question)
+            context = self._sentenceSniffer.request4contexts(question)
 
         fCaller:list[FunctionCaller] = None
         function_description:list[dict[str, Any]] = None
