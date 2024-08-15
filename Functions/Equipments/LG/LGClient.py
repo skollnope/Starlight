@@ -4,7 +4,7 @@ from pywebostv.controls import SystemControl, MediaControl
 from Functions.API.equipment import Equipment
 from Functions.functions import FunctionCaller, FunctionItem
 from Starlight.Helpers.Helper_Functions import *
-from Starlight.context import ContextObject
+from Starlight.context import ContextObject, TYPE_EQUIPMENT_CONTROLLING
 from typing import Any, Generator
 
 # start a register request to the specified equipment
@@ -113,7 +113,9 @@ def notify_on_equipment(args:dict[str, str]) -> str:
 
     return "Done"
 
-lg_general_functions:FunctionCaller = FunctionCaller(ContextObject("Equipment_LG"))
+lg_general_functions:FunctionCaller = FunctionCaller(ContextObject("Equipment_LG", 
+                                                                   TYPE_EQUIPMENT_CONTROLLING,
+                                                                   "Allows to control some equipments"))
 lg_general_functions.append_function(FunctionItem(register_new_equipment_def, register_new_equipment))
 lg_general_functions.append_function(FunctionItem(pause_equipment_def, pause_equipment))
 lg_general_functions.append_function(FunctionItem(notify_on_equipment_def, notify_on_equipment))

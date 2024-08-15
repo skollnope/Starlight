@@ -16,11 +16,16 @@ DEFAULT_EQ_PROMPT=("There is a list of Json object, you have to only answer a li
 if not os.path.exists(api_default_directory):
     os.makedirs(api_default_directory)
 
-# APIObjet content:
-#   - Name, the name you want to give to the object (TV, HIFI, other)
-#   - Room, the room the object is located (can be null) !!!!!!!!!!! TODO: add it to the file and store the files less flat
-#   - ip, the ip to reach the object
-#   - api_key = key to identify the requester (eq. to SSH)
+""" an equipment object handles all the needed information used to identify or control a known equipment.
+    an equipment will be stored locally to not be forgate after a restart
+
+   - Name = the name you want to give to the object (TV, HIFI, other)
+   - Room = the room the object is located (can be null) !!!!!!!!!!! TODO: add it to the file and store the files less flat
+   - ip = the ip to reach the object
+   - constructor = the manufacturer, usually used to know which kind of API protocole is needed for the equipment
+   
+   - the api_key property is a key made to identify the requester (eq. to SSH)
+   """
 
 # TODO: allow to "serialize" the object to allow the assisant to know them all
 
@@ -29,9 +34,10 @@ class Equipment():
     _content:dict[str, Any] = {}
 
     def __init__(self, 
-                 name:str,
+                 name:str= "",
                  room:str = "",
                  ip:str="",
+                 constructor:str="unknown",
                  file:str=""):
 
         if file:
