@@ -1,4 +1,6 @@
 
+from typing import Any
+
 def create_user_message(message:str):
     return {"role": "user", "content": message}
 
