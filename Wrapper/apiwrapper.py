@@ -7,7 +7,7 @@ from Starlight.context import *
 from Starlight.Helpers.sentencesniffer import SentenceSniffer
 
 class APIWrapper(ABC):
-    _function_list: list[FunctionCaller] = None
+    _function_list: dict[ContextObject, FunctionCaller] = None
     _history:list[dict[str, str]] = []
     debug:bool = False
     _contexts:Context = Context()
@@ -19,7 +19,7 @@ class APIWrapper(ABC):
 
         for f in functions:
             self._contexts.append(f.context)
-        self._function_list = functions
+            self._function_list[f.context] = f
 
     def __del__(self):
         if self.debug:
@@ -28,27 +28,10 @@ class APIWrapper(ABC):
     def print_history(self):
         for h in self._history:
             print(h["role"] + ": " + h["content"])
-
-    def serialize_contexts(self, prompt:str):
-        return prompt + self._contexts.serialize()
     
     def append_function_caller(self, function:FunctionCaller):
         if self._contexts.append(function.context):
             self._function_list.append(function)
-    
-    @abstractmethod
-    def ask_for_context(self, sentence:str) -> str:
-        """
-        summary:
-            ask to an API model to return the global context of the sentence
-
-        args:
-        sentence: the sentence wanted to be asked
-
-        returns:
-            the keyword context
-        """
-        pass
 
     def get_functions_by_context(self, context: list[ContextObject]) -> FunctionCaller:
         funcs = []
