@@ -3,7 +3,7 @@ from openai.types.chat import ChatCompletionMessage
 
 from Starlight import constants as cst
 from Starlight import APIAccess as api
-from Starlight.Functions import function_calling as funcs
+from Functions import functions as funcs
 
 # Point to the local server
 client = OpenAI(api_key=api.get_openai_key())

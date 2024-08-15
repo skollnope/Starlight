@@ -1,8 +1,8 @@
 from typing import Any
 from abc import ABC, abstractmethod
 from Starlight import constants as cst
-from Starlight.Functions import function_calling as func
-from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
+from Functions import functions as func
+from Functions.functions import FunctionCaller, FunctionItem
 from Starlight.context import *
 from Starlight.Helpers.sentencesniffer import SentenceSniffer
 

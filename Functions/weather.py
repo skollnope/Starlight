@@ -1,5 +1,5 @@
 from typing import Any
-from Starlight.Functions.function_calling import FunctionCaller
+from Functions.functions import FunctionCaller
 from Starlight.context import ContextObject
 
 get_weather_def: dict[str, Any] = {"name": "get_weather",

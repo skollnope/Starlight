@@ -1,7 +1,7 @@
 from datetime import datetime
 import pytz
 from typing import Any
-from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
+from Functions.functions import FunctionCaller, FunctionItem
 from Starlight.context import ContextObject
 
 get_local_time_def: dict[str, Any] = {"name": "get_local_time",

@@ -1,7 +1,7 @@
 from Starlight.Wrapper.apiwrapper import APIWrapper
 from Starlight import constants as cst
 from Starlight import APIAccess as api
-from Starlight.Functions.function_calling import FunctionCaller
+from Functions.functions import FunctionCaller
 from Starlight.context import *
 from Starlight.Helpers.messagehelper import *
 from Starlight.Helpers.sentencesniffer import OpenAISniffer
