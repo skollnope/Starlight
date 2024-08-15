@@ -4,12 +4,14 @@ from Starlight import constants as cst
 from Starlight.Functions import function_calling as func
 from Starlight.Functions.function_calling import FunctionCaller, FunctionItem
 from Starlight.context import *
+from Starlight.Helpers.sentencesniffer import SentenceSniffer
 
 class APIWrapper(ABC):
     _function_list: list[FunctionCaller] = None
     _history:list[dict[str, str]] = []
     debug:bool = False
     _contexts:Context = Context()
+    _sentenceSniffer:SentenceSniffer=None 
 
     def __init__(self, functions:list[FunctionCaller]):
         if functions is None:
