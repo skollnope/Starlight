@@ -40,8 +40,8 @@ class SentenceSniffer(ABC):
 class OpenAISniffer(SentenceSniffer):
     _client:OpenAI=None
 
-    def __init__(self, model:str):
-        super.__init__(model)
+    def __init__(self, model:str, contexts:Context, equipments:list[Equipment]):
+        super.__init__(model, contexts, equipments)
         self._client = OpenAI(api_key=get_openai_key())
 
     def __ask__(self, messages, temperature=0) -> str:

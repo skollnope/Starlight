@@ -84,3 +84,10 @@ class FunctionCaller():
                                  "function": item.desc})
         
         return functions
+    
+
+def serialize_all_functions(fc:list[FunctionCaller]):
+    functions = []
+    for func in fc:
+        functions.append(func.serialize())
+    return functions

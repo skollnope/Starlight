@@ -33,6 +33,9 @@ class ContextObject(ABC):
         self._desc = description
         pass
 
+    def __hash__(self):
+        return hash((self._ctx, self._type, self._desc))
+
     def __eq__(self, value) -> bool:
         return self.type == value.type and self.context == value.context
 

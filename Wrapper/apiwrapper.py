@@ -7,7 +7,7 @@ from Starlight.context import *
 from Starlight.Helpers.sentencesniffer import SentenceSniffer
 
 class APIWrapper(ABC):
-    _function_list: dict[ContextObject, FunctionCaller] = None
+    _function_list: dict[ContextObject, FunctionCaller] = {}
     _history:list[dict[str, str]] = []
     debug:bool = False
     _contexts:Context = Context()

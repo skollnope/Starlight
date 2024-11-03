@@ -1,10 +1,12 @@
 from Starlight.Wrapper.apiwrapper import APIWrapper
 from Starlight import constants as cst
 from Starlight import APIAccess as api
-from Functions.functions import FunctionCaller
+from Functions.functions import FunctionCaller, serialize_all_functions
+from Functions.API.equipment import getAllEquipments
 from Starlight.context import *
 from Starlight.Helpers.messagehelper import *
 from Starlight.Helpers.sentencesniffer import OpenAISniffer
+from Starlight.Functions.general import general_functions
 
 import json
 from typing import Any
@@ -20,7 +22,7 @@ class OpenAIWrapper(APIWrapper):
                  functions:list[FunctionCaller]=None,
                  prompt:str=cst.SYSTEM_PROMPT):
         super().__init__(functions)
-        self._sentenceSniffer = OpenAISniffer(model=model)
+        self._sentenceSniffer = OpenAISniffer(model, self._contexts, getAllEquipments())
 
         self._model = model
         self._client = OpenAI(api_key=api.get_openai_key())
@@ -74,12 +76,12 @@ class OpenAIWrapper(APIWrapper):
         if self._function_list is not None:
             context = self._sentenceSniffer.request4contexts(question)
 
-        fCaller:list[FunctionCaller] = None
+        fCaller:list[FunctionCaller] = [general_functions]
         function_description:list[dict[str, Any]] = None
         if context:
-            fCaller = self.get_functions_by_context(context)
+            fCaller.append(self.get_functions_by_context(context))
             if fCaller:
-                function_description = fCaller[0].serialize() #TODO: browse them all instead of the first
+                function_description = serialize_all_functions(fCaller)
                 self.log("Function calling found for the '" + '|'.join(str(x) for x in context) + "' context")
 
         self._history.append(create_user_message(question))

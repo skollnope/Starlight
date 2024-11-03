@@ -27,8 +27,6 @@ if not os.path.exists(api_default_directory):
    - the api_key property is a key made to identify the requester (eq. to SSH)
    """
 
-# TODO: allow to "serialize" the object to allow the assisant to know them all
-
 class Equipment():
     _file:str = None
     _content:dict[str, Any] = {}
