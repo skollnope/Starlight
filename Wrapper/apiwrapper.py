@@ -5,6 +5,7 @@ from Functions import functions as func
 from Functions.functions import FunctionCaller, FunctionItem
 from Starlight.context import *
 from Starlight.Helpers.sentencesniffer import SentenceSniffer
+from Starlight.Functions.general import general_context
 
 class APIWrapper(ABC):
     _function_list: dict[ContextObject, FunctionCaller] = {}
@@ -15,8 +16,9 @@ class APIWrapper(ABC):
 
     def __init__(self, functions:list[FunctionCaller]):
         if functions is None:
-            pass
+            pass    
 
+        self._contexts.append(general_context)
         for f in functions:
             self._contexts.append(f.context)
             self._function_list[f.context] = f
@@ -37,7 +39,7 @@ class APIWrapper(ABC):
         funcs = []
         remaining_funcs = self._function_list.copy() # create a copy to don't modify the reference
         for ctx in context:
-            for func in remaining_funcs:
+            for func in remaining_funcs.values():
                 if(func.context == ctx):                    
                     remaining_funcs.remove(func) # already found, no need to re-browse it
                     funcs.append(func) 

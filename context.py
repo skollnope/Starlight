@@ -7,7 +7,9 @@ DEFAULT_CTX_PROMPT = ("There is a list of Json object, you have to only answer a
                     " If the 'description' key isn't empty, you can use it to have deeper information about the context."
                     " Also, the 'Type' key is relevant for the kind of action the context is associated for"
                     " If none of them stuck with the sentence, only answer with 'None'."
-                    " If you find one or more, you must format you answer like: {\"choices\":[{\"type\":\"choice_type1\", \"value\":\"choice_value1\"}, ..., {\"type\":\"choice_typeN\", \"value\":\"choice_valueN\"}]}")
+                    " If you find one or more, you must format you answer like:"
+                    " '{\"choices\":[{\"type\":\"choice_type1\", \"value\":\"choice_value1\"}, ..., {\"type\":\"choice_typeN\", \"value\":\"choice_valueN\"}]}'."
+                    " Also, the 'choice_type' and the 'choice_value' must represent a type and a value I gave you inside the list of available choices.")
 
 
 # below are the default values of a context's type
@@ -24,7 +26,7 @@ TYPE_EQUIPMENT_CONTROLLING:str = "Equipment_Controlling"
 """
 class ContextObject(ABC):
     _type:str
-    _ctx:str = TYPE_FUNCTION_CALLING
+    _ctx:str
     _desc:str
 
     def __init__(self, context:str, type:str=TYPE_FUNCTION_CALLING, description:str=""):
@@ -59,7 +61,7 @@ class ContextObject(ABC):
         obj = json.loads(json_str)
         lst = []
         for o in obj["choices"]:
-            lst.append(ContextObject(o["value"], o["type"], o["description"]))
+            lst.append(ContextObject(o["value"], o["type"]))
         return lst
 
     def __str__(self) -> str:
