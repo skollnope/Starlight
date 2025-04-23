@@ -6,7 +6,16 @@ from typing import Any
 get_all_equipments_def: dict[str, Any] = {"name": "get_all_equipments",
                                         "description": "return all equipments you can remote"}
 def get_all_equipments(args:dict[str, str]=None) -> str:
-    return getAllEquipments()
+    ret:str = "{"
+    equipments = getAllEquipments()
+    for eq in equipments:
+        ret += eq.serialize() + ','
+    
+    if len(equipments) == 0:
+        ret = "No equipments available"
+    else:
+        ret += "}"
+    return ret
 
 general_context = ContextObject("General", description="General functions usable when you need to have deeper information about your accesses/rights")
 

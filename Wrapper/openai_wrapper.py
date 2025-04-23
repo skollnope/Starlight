@@ -56,6 +56,7 @@ class OpenAIWrapper(APIWrapper):
             for call in choice.message.tool_calls:
                 self.log("trying to invoke '" + call.function.name + "' method with \n" + call.function.arguments + " args")
                 result = function_caller.get_function(call.function.name).invoke(self.parse_args(call.function.arguments))
+                self.log("result is: " + result)
                 self._history.append(create_toolcalling_message(result, call.id))
                 
             #automatically send all function answers
@@ -89,7 +90,7 @@ class OpenAIWrapper(APIWrapper):
         completion = self.create_chat(messages=self._history, 
                                       tools=function_description)
         
-        return self.parse_reply(completion.choices[0], fCaller)
+        return self.parse_reply(completion.choices[0], fCaller[0])
 
 
 
