@@ -44,6 +44,7 @@ class OpenAIWrapper(APIWrapper):
                                                     temperature=temperature,
                                                     tools=tools)
     
+    # TODO: change the type from FuctionCaller to list[FunctionCaller]
     def parse_reply(self, choice:Choice, function_caller:FunctionCaller=None) -> str:
         finish_reason = choice.finish_reason
         self.log("finish reason: " + finish_reason)
@@ -55,7 +56,10 @@ class OpenAIWrapper(APIWrapper):
             #call each function requested, then add the answers to the history
             for call in choice.message.tool_calls:
                 self.log("trying to invoke '" + call.function.name + "' method with \n" + call.function.arguments + " args")
+
+                #TODO: browse a list of functions
                 result = function_caller.get_function(call.function.name).invoke(self.parse_args(call.function.arguments))
+                
                 self.log("result is: " + result)
                 self._history.append(create_toolcalling_message(result, call.id))
                 
@@ -90,6 +94,7 @@ class OpenAIWrapper(APIWrapper):
         completion = self.create_chat(messages=self._history, 
                                       tools=function_description)
         
+        # TODO: give the whole fCaller list instead of the 1st one
         return self.parse_reply(completion.choices[0], fCaller[0])
 
 
