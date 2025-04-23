@@ -89,5 +89,5 @@ class FunctionCaller():
 def serialize_all_functions(fc:list[FunctionCaller]):
     functions = []
     for func in fc:
-        functions.append(func.serialize())
+        functions.extend(func.serialize())
     return functions

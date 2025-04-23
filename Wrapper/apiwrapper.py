@@ -35,7 +35,7 @@ class APIWrapper(ABC):
         if self._contexts.append(function.context):
             self._function_list.append(function)
 
-    def get_functions_by_context(self, context: list[ContextObject]) -> FunctionCaller:
+    def get_functions_by_context(self, context: list[ContextObject]) -> list[FunctionCaller]:
         funcs = []
         remaining_funcs = self._function_list.copy() # create a copy to don't modify the reference
         for ctx in context:

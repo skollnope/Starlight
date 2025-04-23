@@ -79,8 +79,8 @@ class OpenAIWrapper(APIWrapper):
         fCaller:list[FunctionCaller] = [general_functions]
         function_description:list[dict[str, Any]] = None
         if context:
-            fCaller.append(self.get_functions_by_context(context))
-            if fCaller:
+            fCaller.extend(self.get_functions_by_context(context))
+            if len(fCaller) != 0:
                 function_description = serialize_all_functions(fCaller)
                 self.log("Function calling found for the '" + '|'.join(str(x) for x in context) + "' context")
 
