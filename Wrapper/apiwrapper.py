@@ -50,4 +50,4 @@ class APIWrapper(ABC):
 
     def log(self, log_message:str):
         if self.debug:
-            print(log_message)
+            print("\033[91m" + log_message + "" "\033[0m")
