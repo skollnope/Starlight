@@ -37,11 +37,9 @@ class APIWrapper(ABC):
 
     def get_functions_by_context(self, context: list[ContextObject]) -> list[FunctionCaller]:
         funcs = []
-        remaining_funcs = self._function_list.copy() # create a copy to don't modify the reference
         for ctx in context:
-            for func in remaining_funcs.values():
+            for func in self._function_list.values():
                 if(func.context == ctx):                    
-                    remaining_funcs.remove(func) # already found, no need to re-browse it
                     funcs.append(func) 
                     break
         return funcs
