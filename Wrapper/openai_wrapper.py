@@ -52,18 +52,20 @@ class OpenAIWrapper(APIWrapper):
             # First, store the answer inside the history
             self._history.append(create_assistant_toolcalls(choice.message.tool_calls))
 
+            self.log_debug("Tool calls count: " + str(len(choice.message.tool_calls)))
+
             # Call each function requested, then add the answers to the history
             for call in choice.message.tool_calls:
-                self.log("trying to invoke '" + call.function.name + "' method with \n" + call.function.arguments + " args")
+                self.log_info("trying to invoke '" + call.function.name + "' method with:\n" + call.function.arguments + " args")
 
                 # Browse the list of functions to find the matching one
                 matching_function = next((fc.get_function(call.function.name) for fc in function_caller if fc.get_function(call.function.name) is not None), None)
                 if matching_function:
                     result = matching_function.invoke(self.parse_args(call.function.arguments))
-                    self.log("result is: " + result)
+                    self.log_debug("result is: " + result)
                     self._history.append(create_toolcalling_message(result, call.id))
                 else:
-                    self.log(f"No matching function found for '{call.function.name}'")
+                    self.log_warning(f"No matching function found for '{call.function.name}'")
 
             # Automatically send all function answers
             completion = self.create_chat(messages=self._history)
