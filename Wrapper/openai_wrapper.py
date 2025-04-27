@@ -44,33 +44,35 @@ class OpenAIWrapper(APIWrapper):
                                                     temperature=temperature,
                                                     tools=tools)
     
-    # TODO: change the type from FuctionCaller to list[FunctionCaller]
-    def parse_reply(self, choice:Choice, function_caller:FunctionCaller=None) -> str:
+    def parse_reply(self, choice:Choice, function_caller:list[FunctionCaller]=None) -> str:
         finish_reason = choice.finish_reason
         self.log("finish reason: " + finish_reason)
 
         if finish_reason == "tool_calls" and function_caller is not None:
-            #first, store the answer inside the history
+            # First, store the answer inside the history
             self._history.append(create_assistant_toolcalls(choice.message.tool_calls))
 
-            #call each function requested, then add the answers to the history
+            # Call each function requested, then add the answers to the history
             for call in choice.message.tool_calls:
                 self.log("trying to invoke '" + call.function.name + "' method with \n" + call.function.arguments + " args")
 
-                #TODO: browse a list of functions
-                result = function_caller.get_function(call.function.name).invoke(self.parse_args(call.function.arguments))
-                
-                self.log("result is: " + result)
-                self._history.append(create_toolcalling_message(result, call.id))
-                
-            #automatically send all function answers
+                # Browse the list of functions to find the matching one
+                matching_function = next((fc.get_function(call.function.name) for fc in function_caller if fc.get_function(call.function.name) is not None), None)
+                if matching_function:
+                    result = matching_function.invoke(self.parse_args(call.function.arguments))
+                    self.log("result is: " + result)
+                    self._history.append(create_toolcalling_message(result, call.id))
+                else:
+                    self.log(f"No matching function found for '{call.function.name}'")
+
+            # Automatically send all function answers
             completion = self.create_chat(messages=self._history)
 
-            #return the final AI answer
-            return self.parse_reply(completion.choices[0])
+            # Return the final AI answer
+            return self.parse_reply(completion.choices[0], function_caller)
 
         elif finish_reason == "stop":
-            #only text answer, just add it to the history then return the answer
+            # Only text answer, just add it to the history then return the answer
             self._history.append(create_assistant_message(choice.message.content))
             return choice.message.content
 
@@ -95,7 +97,7 @@ class OpenAIWrapper(APIWrapper):
                                       tools=function_description)
         
         # TODO: give the whole fCaller list instead of the 1st one
-        return self.parse_reply(completion.choices[0], fCaller[0])
+        return self.parse_reply(completion.choices[0], fCaller)
 
 
 
