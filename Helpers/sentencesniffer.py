@@ -24,7 +24,7 @@ class SentenceSniffer(ABC):
         pass
 
     def request4contexts(self, sentence:str) -> list[ContextObject]:
-        prompt = DEFAULT_CTX_PROMPT + self._contexts.serialize()
+        prompt = DEFAULT_CTX_PROMPT + " Following, the list of available choices: " + self._contexts.serialize()
         message = create_message_with_prompt(prompt, sentence)
 
         answ = self.__ask__(message)
