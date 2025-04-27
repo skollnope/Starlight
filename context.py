@@ -2,14 +2,14 @@ from Starlight import constants as cst
 from abc import ABC, abstractmethod
 import json
 
-DEFAULT_CTX_PROMPT = ("There is a list of Json object, you have to only answer a list, only, or none of those object which are relevant for the asked sentence. "
-                    " Inside each Json Object, there is a 'value' key which is relevant to know the associated context of the object."
-                    " If the 'description' key isn't empty, you can use it to have deeper information about the context."
-                    " Also, the 'Type' key is relevant for the kind of action the context is associated for"
+DEFAULT_CTX_PROMPT = ("I'll give you a list of Json object, your job is simple, answer a list of Json object depending on the context of the sentence I gave you."
+                    " Each Json Object is a context, you can find the context name inside the 'value' key."
+                    " The 'description' key value add some additional information about the context."
+                    " The 'Type' key is the kind of action the context is associated for."
                     " If none of them stuck with the sentence, only answer with 'None'."
-                    " If you find one or more, you must format you answer like:"
+                    " If you find one or more, you must format you answer like the json object I gave you:"
                     " '{\"choices\":[{\"type\":\"choice_type1\", \"value\":\"choice_value1\"}, ..., {\"type\":\"choice_typeN\", \"value\":\"choice_valueN\"}]}'."
-                    " Also, the 'choice_type' and the 'choice_value' must represent a type and a value I gave you inside the list of available choices.")
+                    " Also, the 'choice_type' and the 'choice_value' must represent a 'type' key value and a 'value' key value I gave you inside the list of available choices.")
 
 
 # below are the default values of a context's type
