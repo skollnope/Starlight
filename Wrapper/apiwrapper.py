@@ -50,4 +50,20 @@ class APIWrapper(ABC):
 
     def log(self, log_message:str):
         if self.debug:
-            print("\033[91m" + log_message + "" "\033[0m")
+            print(log_message)
+
+    def log_debug(self, log_message:str):
+        if self.debug:
+            print("\033[94mDEBUG: " + log_message + "" "\033[0m")
+
+    def log_error(self, log_message:str):
+        if self.debug:
+            print("\033[91mERROR: " + log_message + "" "\033[0m")
+            
+    def log_info(self, log_message:str):
+        if self.debug:
+            print("\033[92mINFO: " + log_message + "" "\033[0m")
+            
+    def log_warning(self, log_message:str):
+        if self.debug:
+            print("\033[93mWARNING: " + log_message + "" "\033[0m")
