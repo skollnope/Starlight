@@ -24,6 +24,6 @@ def get_timezone_local_time(args:dict[str, str]=None) -> str:
     current_time = datetime.now(pytz.timezone(args["timezone"]))
     return current_time.isoformat()
 
-datetime_functions = FunctionCaller(ContextObject("DateTime"))
+datetime_functions = FunctionCaller(ContextObject("DateTime", description="Date and time functions"))
 datetime_functions.append_function(FunctionItem(get_local_time_def, get_local_time))
 datetime_functions.append_function(FunctionItem(get_timezone_local_time_def, get_timezone_local_time))
