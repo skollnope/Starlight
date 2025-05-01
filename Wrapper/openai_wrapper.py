@@ -91,7 +91,9 @@ class OpenAIWrapper(APIWrapper):
             fCaller.extend(self.get_functions_by_context(context))
             if len(fCaller) != 0:
                 function_description = serialize_all_functions(fCaller)
-                self.log("Function calling found for the '" + '|'.join(str(x) for x in context) + "' context")
+                self.log_debug(f"#{len(fCaller)} contexts found:")
+                for ctx in context:
+                    self.log_debug("- " + ctx)
 
         self._history.append(create_user_message(question))
 
