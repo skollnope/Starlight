@@ -19,5 +19,5 @@ def get_all_equipments(args:dict[str, str]=None) -> str:
 
 general_context = ContextObject("General", description="General functions usable when you need to have deeper information about your accesses/rights")
 
-general_functions = FunctionCaller("General")
+general_functions = FunctionCaller(general_context)
 general_functions.append_function(FunctionItem(get_all_equipments_def, get_all_equipments))
