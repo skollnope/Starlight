@@ -91,16 +91,17 @@ class OpenAIWrapper(APIWrapper):
             fCaller.extend(self.get_functions_by_context(context))
             if len(fCaller) != 0:
                 function_description = serialize_all_functions(fCaller)
-                self.log_debug(f"#{len(fCaller)} contexts found:")
-                for ctx in context:
-                    self.log_debug("- " + ctx)
+                self.log_debug(f"#{len(fCaller)} functionCallers found:")
+                for f in fCaller:
+                    self.log_debug("- " + str(f))
 
         self._history.append(create_user_message(question))
+
+        self.log_debug("functions serialized: " + str(function_description))
 
         completion = self.create_chat(messages=self._history, 
                                       tools=function_description)
         
-        # TODO: give the whole fCaller list instead of the 1st one
         return self.parse_reply(completion.choices[0], fCaller)
 
 
