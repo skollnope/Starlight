@@ -23,6 +23,9 @@ class FunctionItem():
     @property
     def desc(self) -> dict[str, Any]:
         return self._description
+    
+    def __str__(self) -> str:
+        return str(self.name)
 
     def invoke(self, args:dict[str, str]) -> str:
         result = self._func(args)
@@ -76,6 +79,9 @@ class FunctionCaller():
             if func.name == name:
                 return func
         return None
+    
+    def __str__(self):
+        return f"#{len(self.functions)} functions for: {str(self.context)}"
     
     def serialize(self) -> list[dict[str, Any]]:
         functions = []
