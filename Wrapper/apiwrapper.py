@@ -39,8 +39,9 @@ class APIWrapper(ABC):
         funcs = []
         for ctx in context:
             for func in self._function_list.values():
-                if(func.context == ctx):                    
-                    funcs.append(func) 
+                if(func.context == ctx):      
+                    self.log_debug("Functions found for '" + str(func.context) + "' context")
+                    funcs.append(func)
                     break
         return funcs
 
