@@ -3,7 +3,6 @@ All this project is made to be free and fully usable by anyone else.
 
 Needs:
 	- Python 3.8 or later
-	- Rasa 3.1
 
 libraries:
 	- OpenAi
@@ -12,17 +11,9 @@ libraries:
 	- pywebos
 	- ...
 
-Recommanded:
-	- install anaconda to use Python, Rasa and other libraries
+First of all, you need to create an API key to have an access to the online OpenAI models.
+follow https://platform.openai.com/docs/overview to have more details about the API specifications.
 
-- Rasa Part -
-To be allowed to use this project part, you need to fully install 'Rasa'.
-I used the rasa open source version 3.1.
+once you generated one, you must store it on your computer to prvent lost it, the key is only shown during the generation step, there is no method to see it again.
 
-Follow the following link for installation steps.
-	- https://www.youtube.com/watch?v=RVoFqxmG8p0&ab_channel=Rasa
-	or -  https://rasa.com/docs/rasa/installation/environment-set-up
-
-Rasa Documentation:
-	- https://rasa.com/docs/rasa/
 
