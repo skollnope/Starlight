@@ -15,5 +15,3 @@ First of all, you need to create an API key to have an access to the online Open
 follow https://platform.openai.com/docs/overview to have more details about the API specifications.
 
 once you generated one, you must store it on your computer to prvent lost it, the key is only shown during the generation step, there is no method to see it again.
-
-
